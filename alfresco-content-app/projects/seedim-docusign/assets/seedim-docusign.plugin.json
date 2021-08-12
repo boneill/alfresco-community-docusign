@@ -1,0 +1,129 @@
+{
+  "$schema": "../../../extension.schema.json",
+  "$id": "9a635542-d87a-2359-ae64-ffa199d1a364",
+  "$version": "1.0.0",
+  "$name": "seedim.docusign.plugin",
+  "$description": "docusign plugin",
+  "$vendor": "Seed Information Management",
+  "$license": "Seed Information Management",
+
+  "routes": [
+
+    {
+      "id": "docusign.route",
+      "path": "docusign/signatures",
+      "component": "seedim-docusign.signatures.component"
+    }
+  ],
+
+  "features": {
+    "navbar": [
+      {
+        "id": "seed.docusign.nav",
+        "items": [
+          {
+            "id": "seed.docusign.signatures",
+            "order": 110,
+            "icon": "assignment",
+            "title": "Signatures",
+            "route": "docusign/signatures"
+          }
+        ]
+      }
+
+    ],
+  "toolbar": [
+    {
+      "id": "app.toolbar.seedim.sign",
+      "order": 100,
+      "title": "DIGITAL_SIGNATURE.ACTIONS.REQUEST_SIGNATURE",
+      "icon": "assignment_ind",
+      "actions": {
+        "click": "SIGN_DOCUMENT"
+      },
+      "rules": {
+        "visible": "seedim-docusign.canBeSigned"
+      }
+    },
+    {
+      "id": "app.toolbar.seedim.isSigned",
+      "order": 100,
+      "title": "DIGITAL_SIGNATURE.ACTIONS.REVIEW_SIGNED_DOCUMENT",
+      "icon": "assignment_turned_in",
+      "actions": {
+        "click": "NAVIGATE_TO_SIGNED_DOCUMENT"
+      },
+      "rules": {
+        "visible": "seedim-docusign.isSigned"
+      }
+    }
+  ],
+  "contextMenu": [
+    {
+      "id": "app.toolbar.seedim.sign",
+      "order": 500,
+      "title": "DIGITAL_SIGNATURE.ACTIONS.REQUEST_SIGNATURE",
+      "icon": "assignment_ind",
+      "actions": {
+        "click": "SIGN_DOCUMENT"
+      },
+      "rules": {
+        "visible": "seedim-docusign.canBeSigned"
+      }
+    },
+    {
+      "id": "app.toolbar.seedim.isSigned",
+      "order": 500,
+      "title": "DIGITAL_SIGNATURE.ACTIONS.REVIEW_SIGNED_DOCUMENT",
+      "icon": "assignment_turned_in",
+      "actions": {
+        "click": "NAVIGATE_TO_SIGNED_DOCUMENT"
+      },
+      "rules": {
+        "visible": "seedim-docusign.isSigned"
+      }
+    }
+  ],
+  "viewer": {
+    "toolbarActions": [
+      {
+        "id": "app.toolbar.seedim.sign",
+        "order": 1,
+        "title": "DIGITAL_SIGNATURE.ACTIONS.REQUEST_SIGNATURE",
+        "icon": "assignment_ind",
+        "actions": {
+          "click": "SIGN_DOCUMENT"
+        },
+        "rules": {
+          "visible": "seedim-docusign.canBeSigned"
+        }
+      },
+      {
+        "id": "app.toolbar.seedim.isSigned",
+        "order": 1,
+        "title": "DIGITAL_SIGNATURE.ACTIONS.REVIEW_SIGNED_DOCUMENT",
+        "icon": "assignment_turned_in",
+        "actions": {
+          "click": "NAVIGATE_TO_SIGNED_DOCUMENT"
+        },
+        "rules": {
+          "visible": "seedim-docusign.isSigned"
+        }
+      },
+      {
+        "id": "app.toolbar.seedim.openCertificate",
+        "order": 1,
+        "title": "DIGITAL_SIGNATURE.ACTIONS.OPEN_CERTIFICATE_OF_COMPLETION",
+        "icon": "card_membership",
+        "actions": {
+          "click": "NAVIGATE_TO_CERTIFIED_DOCUMENT"
+        },
+        "rules": {
+          "visible": "seedim-docusign.isSignedDocument"
+        }
+      }
+    ]
+
+  }
+  }
+}

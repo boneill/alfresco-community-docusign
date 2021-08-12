@@ -1,0 +1,15 @@
+<view:view xmlns:view="http://www.alfresco.org/view/repository/1.0"
+      xmlns:cm="http://www.alfresco.org/model/content/1.0" xmlns:app="http://www.alfresco.org/model/application/1.0"
+      xmlns:docusign="http://www.seedim.com.au/model/content/docusign/1.0">
+      
+      <cm:folder view:childName="cm:Docusign-Config">
+      	<view:aspects>
+              <docusign:appConfigurationAspect />
+        </view:aspects>
+        <app:uifacets />
+        <cm:name>Docusign-Config</cm:name>
+        <app:icon>space-icon-default</app:icon>
+        <cm:title>Docusign Configuration Folder</cm:title>
+        <cm:description>Edit Properties on this Folder to set the JWT Authentication Details for Docusign</cm:description>
+      </cm:folder>
+    </view:view>

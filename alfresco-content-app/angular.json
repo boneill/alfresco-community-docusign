@@ -1,0 +1,544 @@
+{
+  "$schema": "./node_modules/@angular/cli/lib/config/schema.json",
+  "version": 1,
+  "newProjectRoot": "projects",
+  "projects": {
+    "app": {
+      "root": "",
+      "sourceRoot": "src",
+      "projectType": "application",
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-angular:browser",
+          "options": {
+            "aot": true,
+            "allowedCommonJsDependencies": [
+              "minimatch",
+              "minimatch-browser",
+              "moment-es6",
+              "superagent",
+              "event-emitter",
+              "brace-expansion",
+              "d"
+            ],
+            "outputPath": "dist/app",
+            "index": "src/index.html",
+            "main": "src/main.ts",
+            "tsConfig": "src/tsconfig.app.json",
+            "polyfills": "src/polyfills.ts",
+            "stylePreprocessorOptions": {
+              "includePaths": [
+                "src/app/ui"
+              ]
+            },
+            "assets": [
+              {
+                "glob": "LICENSE",
+                "input": ".",
+                "output": "/"
+              },
+              "src/assets",
+              "src/favicon-96x96.png",
+              "src/app.config.json",
+              {
+                "glob": "**/*",
+                "input": "node_modules/@alfresco/adf-core/prebuilt-themes",
+                "output": "/assets/prebuilt-themes"
+              },
+              {
+                "glob": "**/*",
+                "input": "node_modules/@alfresco/adf-core/bundles/assets",
+                "output": "/assets"
+              },
+              {
+                "glob": "**/*",
+                "input": "node_modules/@alfresco/adf-content-services/bundles/assets",
+                "output": "/assets"
+              },
+              {
+                "glob": "pdf.worker.min.js",
+                "input": "node_modules/pdfjs-dist/build",
+                "output": "/"
+              },
+              {
+                "glob": "extension.schema.json",
+                "input": ".",
+                "output": "./assets"
+              },
+              {
+                "glob": "**/*",
+                "input": "node_modules/@alfresco/adf-office-services-ext/assets",
+                "output": "./assets/adf-office-services-ext"
+              },
+              {
+                "glob": "**/*",
+                "input": "projects/adf-office-services-ext/assets",
+                "output": "./assets/adf-office-services-ext"
+              },
+              {
+                "glob": "aos.plugin.json",
+                "input": "projects/adf-office-services-ext/assets",
+                "output": "./assets/plugins"
+              },
+              {
+                "glob": "about.plugin.json",
+                "input": "projects/aca-about/assets",
+                "output": "./assets/plugins"
+              },
+              {
+                "glob": "settings.plugin.json",
+                "input": "projects/aca-settings/assets",
+                "output": "./assets/plugins"
+              },
+              {
+                "glob": "**/*.json",
+                "input": "projects/seedim-docusign/assets",
+                "output": "./assets/plugins"
+              }
+            ],
+            "styles": [
+              "src/assets/fonts/material-icons/material-icons.css",
+              "src/assets/fonts/muli/muli.css",
+              "node_modules/cropperjs/dist/cropper.min.css",
+              "src/styles.scss"
+            ],
+            "scripts": [
+              "node_modules/pdfjs-dist/build/pdf.js",
+              "node_modules/pdfjs-dist/web/pdf_viewer.js",
+              "node_modules/moment/min/moment.min.js"
+            ]
+          },
+          "configurations": {
+            "production": {
+              "optimization": true,
+              "outputHashing": "all",
+              "sourceMap": false,
+              "extractCss": true,
+              "namedChunks": false,
+              "aot": true,
+              "extractLicenses": true,
+              "vendorChunk": false,
+              "buildOptimizer": true,
+              "fileReplacements": [
+                {
+                  "replace": "src/environments/environment.ts",
+                  "with": "src/environments/environment.prod.ts"
+                }
+              ],
+              "budgets": [
+                {
+                  "type": "bundle",
+                  "name": "main",
+                  "maximumWarning": "2mb",
+                  "maximumError": "5mb"
+                },
+                {
+                  "type": "bundle",
+                  "name": "vendor",
+                  "maximumWarning": "10mb",
+                  "maximumError": "15mb"
+                },
+                {
+                  "type": "anyComponentStyle",
+                  "maximumWarning": "6kb"
+                }
+              ]
+            },
+            "release": {
+              "fileReplacements": [
+                {
+                  "replace": "src/environments/environment.ts",
+                  "with": "src/environments/environment.release.ts"
+                }
+              ]
+            },
+            "e2e": {
+              "budgets": [
+                {
+                  "type": "anyComponentStyle",
+                  "maximumWarning": "6kb"
+                }
+              ],
+              "optimization": true,
+              "outputHashing": "all",
+              "sourceMap": false,
+              "extractCss": true,
+              "namedChunks": false,
+              "aot": true,
+              "extractLicenses": true,
+              "vendorChunk": false,
+              "buildOptimizer": true,
+              "fileReplacements": [
+                {
+                  "replace": "src/environments/environment.ts",
+                  "with": "src/environments/environment.e2e.ts"
+                }
+              ]
+            }
+          }
+        },
+        "serve": {
+          "builder": "@angular-devkit/build-angular:dev-server",
+          "options": {
+            "browserTarget": "app:build",
+            "port": 4200,
+            "host": "0.0.0.0",
+            "proxyConfig": "src/proxy.conf.js"
+          },
+          "configurations": {
+            "production": {
+              "browserTarget": "app:build:production"
+            },
+            "e2e": {
+              "browserTarget": "app:build:e2e"
+            },
+            "release": {
+                "browserTarget": "app:build:release"
+            }
+          }
+        },
+        "lite-serve": {
+          "builder": "@angular-custom-builders/lite-serve:dist-serve",
+          "options": {
+            "publicHost": "http://localhost:4200",
+            "browserTarget": "app:build"
+          },
+          "configurations": {
+            "standalone": {
+              "watch": true
+            }
+          }
+        },
+        "extract-i18n": {
+          "builder": "@angular-devkit/build-angular:extract-i18n",
+          "options": {
+            "browserTarget": "app:build"
+          }
+        },
+        "test": {
+          "builder": "@angular-devkit/build-angular:karma",
+          "options": {
+            "main": "src/test.ts",
+            "karmaConfig": "./karma.conf.js",
+            "sourceMap": true,
+            "polyfills": "src/polyfills.ts",
+            "stylePreprocessorOptions": {
+              "includePaths": [
+                "src/app/ui"
+              ]
+            },
+            "tsConfig": "src/tsconfig.spec.json",
+            "scripts": [
+              "node_modules/pdfjs-dist/build/pdf.js",
+              "node_modules/pdfjs-dist/web/pdf_viewer.js",
+              "node_modules/moment/min/moment.min.js"
+            ],
+            "styles": [
+              "src/assets/fonts/material-icons/material-icons.css",
+              "src/assets/fonts/muli/muli.css",
+              "src/styles.scss"
+            ],
+            "assets": [
+              "src/assets",
+              "src/favicon-96x96.png",
+              "src/app.config.json",
+              {
+                "glob": "**/*",
+                "input": "node_modules/@alfresco/adf-core/prebuilt-themes",
+                "output": "/assets/prebuilt-themes"
+              },
+              {
+                "glob": "**/*",
+                "input": "node_modules/@alfresco/adf-core/bundles/assets",
+                "output": "/assets"
+              },
+              {
+                "glob": "**/*",
+                "input": "node_modules/@alfresco/adf-content-services/bundles/assets",
+                "output": "/assets"
+              },
+              {
+                "glob": "pdf.worker.min.js",
+                "input": "node_modules/pdfjs-dist/build",
+                "output": "/"
+              }
+            ]
+          }
+        },
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "src/tsconfig.app.json",
+              "src/tsconfig.spec.json"
+            ],
+            "exclude": [
+              "**/node_modules/**",
+              "package.json"
+            ]
+          }
+        }
+      }
+    },
+    "app-e2e": {
+      "root": "e2e",
+      "sourceRoot": "e2e",
+      "projectType": "application",
+      "architect": {
+        "e2e": {
+          "builder": "@angular-devkit/build-angular:protractor",
+          "options": {
+            "protractorConfig": "./protractor.conf.js",
+            "devServerTarget": "app:serve"
+          },
+          "configurations": {
+            "production": {
+              "devServerTarget": "app:serve:production"
+            }
+          }
+        },
+        "e2elite": {
+          "builder": "@angular-devkit/build-angular:protractor",
+          "options": {
+            "protractorConfig": "protractor.conf.js",
+            "webdriverUpdate": false,
+            "devServerTarget": "app:lite-serve",
+            "invertGrep": true
+          }
+        },
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "e2e/tsconfig.e2e.json"
+            ],
+            "exclude": [
+              "**/node_modules/**",
+              "package.json"
+            ]
+          }
+        }
+      }
+    },
+    "adf-office-services-ext": {
+      "root": "projects/adf-office-services-ext",
+      "sourceRoot": "projects/adf-office-services-ext/src",
+      "projectType": "library",
+      "prefix": "lib",
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-ng-packagr:build",
+          "options": {
+            "tsConfig": "projects/adf-office-services-ext/tsconfig.lib.json",
+            "project": "projects/adf-office-services-ext/ng-package.json"
+          },
+          "configurations": {
+            "production": {
+              "tsConfig": "projects/adf-office-services-ext/tsconfig.lib.prod.json"
+            }
+          }
+        },
+        "test": {
+          "builder": "@angular-devkit/build-angular:karma",
+          "options": {
+            "main": "projects/adf-office-services-ext/src/test.ts",
+            "tsConfig": "projects/adf-office-services-ext/tsconfig.spec.json",
+            "karmaConfig": "projects/adf-office-services-ext/karma.conf.js"
+          }
+        },
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "projects/adf-office-services-ext/tsconfig.lib.json",
+              "projects/adf-office-services-ext/tsconfig.spec.json"
+            ],
+            "exclude": [
+              "**/node_modules/**"
+            ]
+          }
+        }
+      }
+    },
+    "aca-shared": {
+      "root": "projects/aca-shared",
+      "sourceRoot": "projects/aca-shared/src",
+      "projectType": "library",
+      "prefix": "lib",
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-ng-packagr:build",
+          "options": {
+            "tsConfig": "projects/aca-shared/tsconfig.lib.json",
+            "project": "projects/aca-shared/ng-package.json"
+          },
+          "configurations": {
+            "production": {
+              "tsConfig": "projects/aca-shared/tsconfig.lib.prod.json"
+            }
+          }
+        },
+        "test": {
+          "builder": "@angular-devkit/build-angular:karma",
+          "options": {
+            "main": "projects/aca-shared/test.ts",
+            "tsConfig": "projects/aca-shared/tsconfig.spec.json",
+            "karmaConfig": "projects/aca-shared/karma.conf.js"
+          }
+        },
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "projects/aca-shared/tsconfig.lib.json",
+              "projects/aca-shared/tsconfig.spec.json"
+            ],
+            "exclude": [
+              "**/node_modules/**"
+            ]
+          }
+        }
+      }
+    },
+    "aca-testing-shared": {
+      "root": "projects/aca-testing-shared",
+      "sourceRoot": "projects/aca-testing-shared/src",
+      "projectType": "library",
+      "prefix": "lib"
+    },
+    "aca-about": {
+      "projectType": "library",
+      "root": "projects/aca-about",
+      "sourceRoot": "projects/aca-about/src",
+      "prefix": "lib",
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-ng-packagr:build",
+          "options": {
+            "tsConfig": "projects/aca-about/tsconfig.lib.json",
+            "project": "projects/aca-about/ng-package.json"
+          },
+          "configurations": {
+            "production": {
+              "tsConfig": "projects/aca-about/tsconfig.lib.prod.json"
+            }
+          }
+        },
+        "test": {
+          "builder": "@angular-devkit/build-angular:karma",
+          "options": {
+            "main": "projects/aca-about/src/test.ts",
+            "tsConfig": "projects/aca-about/tsconfig.spec.json",
+            "karmaConfig": "projects/aca-about/karma.conf.js"
+          }
+        },
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "projects/aca-about/tsconfig.lib.json",
+              "projects/aca-about/tsconfig.spec.json"
+            ],
+            "exclude": [
+              "**/node_modules/**"
+            ]
+          }
+        }
+      }
+    },
+    "aca-settings": {
+      "projectType": "library",
+      "root": "projects/aca-settings",
+      "sourceRoot": "projects/aca-settings/src",
+      "prefix": "lib",
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-ng-packagr:build",
+          "options": {
+            "tsConfig": "projects/aca-settings/tsconfig.lib.json",
+            "project": "projects/aca-settings/ng-package.json"
+          },
+          "configurations": {
+            "production": {
+              "tsConfig": "projects/aca-settings/tsconfig.lib.prod.json"
+            }
+          }
+        },
+        "test": {
+          "builder": "@angular-devkit/build-angular:karma",
+          "options": {
+            "main": "projects/aca-settings/src/test.ts",
+            "tsConfig": "projects/aca-settings/tsconfig.spec.json",
+            "karmaConfig": "projects/aca-settings/karma.conf.js"
+          }
+        },
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "projects/aca-settings/tsconfig.lib.json",
+              "projects/aca-settings/tsconfig.spec.json"
+            ],
+            "exclude": [
+              "**/node_modules/**"
+            ]
+          }
+        }
+      }
+    },
+    "seedim-docusign": {
+      "projectType": "library",
+      "root": "projects/seedim-docusign",
+      "sourceRoot": "projects/seedim-docusign/src",
+      "prefix": "lib",
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-angular:ng-packagr",
+          "options": {
+            "tsConfig": "projects/seedim-docusign/tsconfig.lib.json",
+            "project": "projects/seedim-docusign/ng-package.json"
+          },
+          "configurations": {
+            "production": {
+              "tsConfig": "projects/seedim-docusign/tsconfig.lib.prod.json"
+            }
+          }
+        },
+        "test": {
+          "builder": "@angular-devkit/build-angular:karma",
+          "options": {
+            "main": "projects/seedim-docusign/src/test.ts",
+            "tsConfig": "projects/seedim-docusign/tsconfig.spec.json",
+            "karmaConfig": "projects/seedim-docusign/karma.conf.js"
+          }
+        },
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "projects/seedim-docusign/tsconfig.lib.json",
+              "projects/seedim-docusign/tsconfig.spec.json"
+            ],
+            "exclude": [
+              "**/node_modules/**"
+            ]
+          }
+        }
+      }
+    }
+  },
+  "defaultProject": "app",
+  "schematics": {
+    "@schematics/angular:component": {
+      "prefix": "aca",
+      "style": "scss"
+    },
+    "@schematics/angular:directive": {
+      "prefix": "aca"
+    }
+  },
+  "cli": {
+    "packageManager": "npm",
+    "analytics": false
+  }
+}

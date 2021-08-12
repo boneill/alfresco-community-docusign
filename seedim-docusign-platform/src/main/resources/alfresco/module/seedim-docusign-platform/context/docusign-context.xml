@@ -1,0 +1,129 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE beans PUBLIC '-//SPRING//DTD BEAN//EN' 'http://www.springframework.org/dtd/spring-beans.dtd'>
+<!--
+	Licensed to the Apache Software Foundation (ASF) under one or more
+	contributor license agreements.  See the NOTICE file distributed with
+	this work for additional information regarding copyright ownership.
+	The ASF licenses this file to You under the Apache License, Version 2.0
+	(the "License"); you may not use this file except in compliance with
+	the License.  You may obtain a copy of the License at
+	
+	http://www.apache.org/licenses/LICENSE-2.0
+	
+	Unless required by applicable law or agreed to in writing, software
+	distributed under the License is distributed on an "AS IS" BASIS,
+	WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+	See the License for the specific language governing permissions and
+	limitations under the License.
+-->
+ <beans>
+	
+	<!-- WEBSCRIPTS -->
+	
+	<!-- Webscript bean to ceate a signature rquest -->
+    <bean id="webscript.au.com.seedim.docusign.api.signdocument.post"
+      class="au.com.seedim.docusign.api.SendForSignatureWebscript" 
+      parent="webscript">
+       <property name="docusignService" ref="docusign.DocusignService" />
+       <property name="personService" ref="PersonService" />
+       <property name="nodeService" ref="NodeService" />
+  	</bean>
+  	
+  	<!-- Webscript bean to create a signature request for multiple users -->
+    <bean id="webscript.au.com.seedim.docusign.api.multiuser-signdocument.post"
+      class="au.com.seedim.docusign.api.SendForSignatureMultiUserWebscript" 
+      parent="webscript">
+       <property name="docusignService" ref="docusign.DocusignService" />
+       <property name="personService" ref="PersonService" />
+       <property name="nodeService" ref="NodeService" />
+  	</bean>
+  	
+  	
+  	
+  	<!-- Webscript bean to list all documents that are part of a signature request -->
+    <bean id="webscript.au.com.seedim.docusign.api.signaturerequests.get"
+      class="au.com.seedim.docusign.api.SignatureRequestListWebscript" 
+      parent="webscript">
+       <property name="docusignService" ref="docusign.DocusignService" />
+       <property name="personService" ref="PersonService" />
+       <property name="nodeService" ref="NodeService" />
+       <property name="permissionService" ref="PermissionService" />
+  	</bean>
+  	 
+  	
+  	<!-- SERVICES -->
+  	<!-- Docusign Service Bean -->
+    <bean id="docusign.DocusignService" class="au.com.seedim.docusign.service.DocusignService">
+        <property name="nodeService" ref="NodeService" />
+        <property name="contentService" ref="ContentService" />
+        <property name="nodeLocatorService" ref="nodeLocatorService"/>
+        <property name="authenticationService" ref="AuthenticationService"/>
+        <property name="searchService" ref="SearchService"/>
+        <property name="retryingTransactionHelper" ref="retryingTransactionHelper" />
+        <property name="clientId">
+            <value>${DS_CLIENT_ID}</value>
+        </property>
+        <property name="apiUserId">
+            <value>${DS_API_USER_GUID}</value>
+        </property>
+        <property name="targetAccount">
+            <value>${DS_TARGET_ACCOUNT_ID}</value>
+        </property>
+        <property name="authServer">
+            <value>${DS_AUTH_SERVER}</value>
+        </property>
+        <property name="privateKey">
+            <value>${DS_PRIVATE_KEY}</value>
+        </property>
+        <!--  Location on class path that the private key pem file is stored for JWTauth flow (eg /alfresco/share/classes/docusign/apiPrivateKey.PEM -->
+        <property name="privateKeyPemFile">
+            <value>${DS_PRIVATE_KEY_PEM_FILE}</value>
+        </property>
+        
+    </bean>
+  <!-- Actions -->
+  
+  <bean id="process-signed-document"
+      class="au.com.seedim.docusign.action.ProcessSignedDocument" 
+      parent="action-executer">
+      <property name="docusignService" ref="docusign.DocusignService" />
+      
+  </bean>  
+
+   <bean id="sendForSignatureAction"
+      class="au.com.seedim.docusign.action.SendForSignatureAction" 
+      parent="action-executer">
+      <property name="docusignService" ref="docusign.DocusignService" />
+      <property name="personService" ref="PersonService" />
+      <property name="nodeService" ref="NodeService" />
+      
+  </bean> 
+
+  
+  <!--  Behaviour Context Beans-->
+  
+  <bean id="docusign.onCopyDocusignDocumentBehaviour" 
+      class="au.com.seedim.docusign.repo.behaviour.OnCopyDocusignDocument" 
+      init-method="init">
+    <property name="policyComponent" ref="policyComponent" />
+    <property name="nodeService" ref="nodeService" />
+    <!-- <property name="enabled" value="true"/> -->
+    <property name="enabled">
+            <value>true</value>
+    </property>      
+    
+  </bean>
+  
+  
+<bean id="seedimActionFormProcessor" class="au.com.seedim.utils.form.processor.SeedimActionFormProcessor" init-method="register">
+      <property name="processorRegistry" ref="formProcessorRegistry" />
+      <property name="matchPattern">
+         <value>seedimaction</value>
+      </property>
+      <property name="actionService" ref="ActionService" />
+      <property name="dictionaryService" ref="DictionaryService" />
+      <property name="namespaceService" ref="NamespaceService" />
+   </bean>
+  	
+  
+</beans>  

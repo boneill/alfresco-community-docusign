@@ -1,0 +1,99 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+                http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
+   
+   <!--
+    Define beans related to this Share extension here, such as
+     evaluators and resource bootstrapping.
+
+     Note. Any configuration related to the whole Share.war webapp
+           (i.e. not specific to this share extension) should be
+            placed in the alfresco-allinone/share/src/main/resources/alfresco/web-extension/custom-slingshot-application-context.xml file
+   -->
+
+   <!-- Add module specific messages and labels -->
+   <bean id="au.com.seedim.seedim-docusign-share.resources"
+         class="org.springframework.extensions.surf.util.ResourceBundleBootstrapComponent">
+      <property name="resourceBundles">
+         <list>
+            <value>alfresco.web-extension.messages.seedim-docusign-share</value>
+         </list>
+      </property>
+   </bean>
+   
+   <!-- Share Configuration -->
+  <bean id="seedim-docusign.share.config" class="org.springframework.extensions.config.ConfigBootstrap" init-method="register">
+    <property name="configService" ref="web.config" />
+    <property name="configs">
+      <list>
+        <value>classpath:alfresco/web-extension/seedim-docusign-share-form-config.xml</value>
+        <value>classpath:alfresco/web-extension/seedim-docusign-share-config.xml</value>
+      </list>
+    </property>
+  </bean>
+  
+  <bean id="seedim.evaluator.doclib.action.isDocument" parent="evaluator.doclib.action.nodeType">
+      <property name="types">
+         <list>
+            <value>cm:content</value>
+         </list>
+      </property>
+   </bean> 
+   <bean id="seedim.evaluator.doclib.action.hasDigitalSignatureAspect" class="org.alfresco.web.evaluator.HasAspectEvaluator">
+    <property name="aspects">
+      <list>
+        <value>docusign:digitalSignature</value>
+      </list>
+    </property>
+  </bean>
+  <bean id="seedim.evaluator.doclib.action.signatureComplete" parent="evaluator.doclib.action.value">
+    <property name="accessor" value="node.properties.docusign:status" />
+    <property name="comparator">
+        <bean class="org.alfresco.web.evaluator.StringEqualsComparator">
+            <property name="value" value="completed" />
+        </bean>
+    </property>
+	</bean>
+  <bean id="seedim.evaluator.doclib.action.isSignedDocument" parent="evaluator.doclib.action.value">
+    <property name="accessor" value="node.properties.docusign:documentType" />
+    <property name="comparator">
+        <bean class="org.alfresco.web.evaluator.StringEqualsComparator">
+            <property name="value" value="Signed" />
+        </bean>
+    </property>
+   </bean>
+	<bean id="seedim.evaluator.doclib.action.signatureRequestMimetype" parent="evaluator.doclib.action.isMimetype">
+      <property name="mimetypes">
+         <list>
+            <value>application/pdf</value>
+            <value>image/png</value>
+            <value>image/jpeg</value>
+            <value>image/gif</value>
+            <value>image/bmp</value>
+            <value>image/tiff</value>
+            <value>application/vnd.openxmlformats-officedocument.wordprocessingml.document</value>
+            <value>application/msword</value>
+            <value>application/vnd.ms-word.document.macroenabled.12</value>
+            <value>application/vnd.openxmlformats-officedocument.wordprocessingml.template</value>
+            <value>application/vnd.openxmlformats-officedocument.presentationml.presentation</value>
+            <value>application/vnd.openxmlformats-officedocument.presentationml.template</value>
+            <value>application/vnd.openxmlformats-officedocument.presentationml.slideshow</value>
+            <value>application/vnd.ms-powerpoint</value>
+            <value>application/vnd.ms-powerpoint.presentation.macroenabled.12</value>
+            <value>application/vnd.ms-excel</value>
+            <value>application/vnd.ms-excel.sheet.macroenabled.12</value>
+            <value>application/vnd.openxmlformats-officedocument.spreadsheetml.sheet</value>           
+            <value>text/html</value>
+            <value>text/csv</value>
+            <value>application/vnd.ms-outlook</value>
+            <value>application/rtf</value>
+            <value>text/plain</value>
+            <value>application/wordperfect</value>
+         </list>
+      </property>
+   </bean>
+	
+
+</beans>

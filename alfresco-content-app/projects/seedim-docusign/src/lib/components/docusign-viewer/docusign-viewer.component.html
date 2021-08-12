@@ -1,0 +1,29 @@
+<adf-viewer
+  [showViewer]="true"
+  [overlayMode]="true"
+  [nodeId]="docId"
+  [allowGoBack]="true"
+  (goBack)="goBack($event)"
+  (showViewerChange)="goBack($event)"
+  [allowPrint]="true"
+  [allowRightSidebar]="false"
+  [showRightSidebar]="false"
+  [allowDownload]="true"
+  [allowFullScreen]="true"
+>
+<!--<adf-viewer-sidebar *ngIf="infoDrawerOpened$ | async">
+  <aca-info-drawer [node]="selection.file"></aca-info-drawer>
+</adf-viewer-sidebar>-->
+<adf-viewer-toolbar-actions>
+  <button
+        *ngIf="isSignedDocument"
+        mat-icon-button
+        title="{{
+          'DIGITAL_SIGNATURE.ACTIONS.OPEN_CERTIFICATE_OF_COMPLETION' | translate
+        }}"
+        (click)="navigateToCertifiedDocument()"
+      >
+        <mat-icon>card_membership</mat-icon>
+      </button>
+</adf-viewer-toolbar-actions>
+</adf-viewer>

@@ -1,0 +1,9 @@
+<webscript>
+   <shortname>List Docusign Signature Request Documents</shortname>
+   <description>List Docusign Signature Request Documents</description>
+   <url>/seedim/docusign/signaturerequests?status={sent|completed|voided}&amp;sentBy={userId?}&amp;blockSize{default-100?}&amp;blockNumber{default-1?}</url>
+  <format default="json"></format>
+  <authentication>user</authentication>
+  <transaction>none</transaction>
+  <family>SeedIM Docusign</family>
+</webscript>

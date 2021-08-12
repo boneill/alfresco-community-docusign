@@ -1,0 +1,5 @@
+target/
+.settings/
+.project
+.classpath
+src/main/docker/java11-openjdk-dcevm-linux.tar.gz

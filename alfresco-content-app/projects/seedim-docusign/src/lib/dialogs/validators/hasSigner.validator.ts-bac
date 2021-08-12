@@ -1,0 +1,70 @@
+import { ValidatorFn, FormControl, FormGroup, FormArray } from '@angular/forms';
+
+/**
+ * A conditional validator generator. Assigns a validator to the formGroup to check that the smallValueControl is less that the value of the largeValueControl
+ * It also only returns an error if the largetValueControl > 0 and the smallValueControl > 0
+ * @example
+ *
+ * this.form = this.formBuilder.group(
+        {
+          expireDays: [this.defaultExpireDays, [Validators.min(0), Validators.max(90)]],
+          expireWarn: [this.defaultExpireWarn, [Validators.min(0), Validators.max(21)
+        },
+        {
+          
+            validators: [lessThanValidator('expireDays', 'expireWarn')] // <-----
+        
+        }
+
+        // error message display
+         <mat-error *ngIf="form.controls['expireWarn'].hasError('notLessThan')">
+              {{
+                'LESS THAN ERROR'
+              }}
+            </mat-error>
+
+ * @param largeValueControl - Control that holds the control that is greater than the smallValueControl value
+ * @param smallValueControl - 
+ */
+
+export function hasSignerValidator(
+): ValidatorFn {
+  return (formArr: FormArray) => {
+    let valid = false;
+
+    var recipientSigner = false;
+    
+
+    console.log('hasSignerValidator', formArr);
+    for(let recipientGroup of formArr.controls){
+
+      let action = recipientGroup.get['action'];
+      valid = "sign" === action? true : false;
+      if(valid){
+        break;
+      }
+    }
+    
+    if (valid)
+    ) {
+     
+      //return valid ? null : { notLessThan : true };
+    if (!valid) {
+
+      formArr.controls
+      formGroup.controls["smallerValueControl"].setErrors({ notLessThan: true });
+      return { notLessThan: true };
+    } else {
+      console.log('Entered else');
+      if (formGroup.controls[smallerValueControl].hasError('notLessThan')) {
+        console.log('hasError not less than');
+        //formGroup.controls[smallerValueControl].setErrors(null);
+
+        delete formGroup.controls[smallerValueControl].errors['notLessThan'];
+        formGroup.controls[smallerValueControl].updateValueAndValidity();
+      }
+
+      //return null;
+    }
+  };
+}

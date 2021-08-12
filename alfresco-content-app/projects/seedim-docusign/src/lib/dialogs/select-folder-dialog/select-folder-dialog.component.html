@@ -1,0 +1,48 @@
+<h2 mat-dialog-title>
+  {{ title | translate }}
+</h2>
+
+<mat-dialog-content>
+  <adf-breadcrumb
+    *ngIf="navigate"
+    class="files-breadcrumb"
+    root="Contracts"
+    [target]="documentList"
+    [folderNode]="documentList.folderNode"
+    [transform]="changeBreadcrumbPath"
+  >
+  </adf-breadcrumb>
+
+  <adf-document-list
+    #documentList
+    [currentFolderId]="startFolderId"
+    [contextMenuActions]="false"
+    [contentActions]="false"
+    [selectionMode]="'single'"
+    [rowFilter]="rowFilter"
+    [imageResolver]="imageResolver"
+    [where]="where"
+    [navigate]="navigate"
+    (nodeClick)="selectFolder($event.value?.entry)"
+    (folderChange)="folderChange($event)"
+  >
+  </adf-document-list>
+</mat-dialog-content>
+
+<mat-dialog-actions class="adf-dialog-buttons">
+  <span class="adf-fill-remaining-space"></span>
+
+  <button mat-button id="adf-folder-cancel-button" mat-dialog-close>
+    {{ 'CORE.FOLDER_DIALOG.CANCEL_BUTTON.LABEL' | translate }}
+  </button>
+
+  <button
+    class="adf-dialog-action-button"
+    id="adf-folder-create-button"
+    mat-button
+    (click)="submit()"
+    [disabled]="!folder"
+  >
+    {{ 'NODE_SELECTOR.SELECT_DESTINATION_FOLDER' | translate }}
+  </button>
+</mat-dialog-actions>

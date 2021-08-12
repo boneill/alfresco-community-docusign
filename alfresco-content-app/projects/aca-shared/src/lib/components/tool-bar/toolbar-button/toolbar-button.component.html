@@ -1,0 +1,17 @@
+<ng-container [ngSwitch]="type">
+  <ng-container *ngSwitchCase="'icon-button'">
+    <button
+      [id]="actionRef.id"
+      mat-icon-button
+      [color]="color"
+      [attr.aria-label]="actionRef.description || actionRef.title | translate"
+      [attr.title]="actionRef.description || actionRef.title | translate"
+      (click)="runAction()"
+    >
+      <adf-icon [value]="actionRef.icon"></adf-icon>
+    </button>
+  </ng-container>
+  <ng-container *ngSwitchCase="'menu-item'">
+    <app-toolbar-menu-item [actionRef]="actionRef"></app-toolbar-menu-item>
+  </ng-container>
+</ng-container>

@@ -1,0 +1,333 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<model name="docusign:contentModel" xmlns="http://www.alfresco.org/model/dictionary/1.0">
+
+    <!-- Optional meta-data about the model -->
+    <description>Document Model for Docusign Repo Extension</description>
+    <author>Seed Information Management</author>
+    <version>1.0</version>
+
+    <imports>
+        <!-- Import Alfresco Dictionary Definitions -->
+        <import uri="http://www.alfresco.org/model/dictionary/1.0" prefix="d"/>
+        <!-- Import Alfresco Content Domain Model Definitions -->
+        <import uri="http://www.alfresco.org/model/content/1.0" prefix="cm"/>
+        <!-- Import Alfresco System Model Definitions -->
+        <import uri="http://www.alfresco.org/model/system/1.0" prefix="sys"/>
+    </imports>
+
+    <!-- Custom namespace for your domain -->
+    <namespaces>
+        <namespace uri="http://www.seedim.com.au/model/content/docusign/1.0" prefix="docusign"/>
+    </namespaces>
+
+    <!-- ===============================================================================================================
+        Constraints, Types, and Aspects go here...
+        -->
+
+	<aspects>
+		    <!--  Used to identify the business the user is from.   -->
+        <aspect name="docusign:digitalSignature">
+          <title>Digital Signature</title>
+          <properties>
+          
+          	<!-- Type of document, eg Original or Signed copy -->
+          	<property name="docusign:documentType">
+              <title>Document Type</title>
+              <type>d:text</type>
+              <mandatory>true</mandatory>
+              <multiple>false</multiple>
+              <index enabled="true">
+                      <atomic>true</atomic>       <!-- index in the foreground -->
+                      <stored>true</stored>       <!-- store the property value in the index -->
+                      <tokenised>false</tokenised>
+                    </index>
+            </property>
+            
+            <!-- Digital Signature Request Status -->
+            <property name="docusign:status">
+              <title>Signature Request Status</title>
+              <type>d:text</type>
+              <mandatory>true</mandatory>
+              <multiple>false</multiple>
+              <index enabled="true">
+                      <atomic>true</atomic>       <!-- index in the foreground -->
+                      <stored>true</stored>       <!-- store the property value in the index -->
+                      <tokenised>false</tokenised>
+                    </index>
+            </property>
+            <!-- Digital Signature Envelope ID -->
+            <property name="docusign:envelopeId">
+              <title>Envelope ID</title>
+              <type>d:text</type>
+              <mandatory>false</mandatory>
+              <multiple>false</multiple>
+              <index enabled="true">
+                      <atomic>true</atomic>       <!-- index in the foreground -->
+                      <stored>true</stored>       <!-- store the property value in the index -->
+                      <tokenised>false</tokenised>
+                    </index>
+            </property>
+            <property name="docusign:signerEmail">
+              <title>Signer Email</title>
+              <type>d:text</type>
+              <mandatory>true</mandatory>
+              <multiple>false</multiple>
+              <index enabled="true">
+                      <atomic>true</atomic>       <!-- index in the foreground -->
+                      <stored>true</stored>       <!-- store the property value in the index -->
+                      <tokenised>false</tokenised>
+                    </index>
+            </property>
+            <property name="docusign:signerName">
+              <title>Signer Name</title>
+              <type>d:text</type>
+              <mandatory>true</mandatory>
+              <multiple>false</multiple>
+              <index enabled="true">
+                      <atomic>true</atomic>       <!-- index in the foreground -->
+                      <stored>true</stored>       <!-- store the property value in the index -->
+                      <tokenised>false</tokenised>
+                    </index>
+            </property>
+            <property name="docusign:ccUserId">
+              <title>Signature Requester</title>
+              <type>d:text</type>
+              <mandatory>true</mandatory>
+              <multiple>false</multiple>
+              <index enabled="true">
+                      <atomic>true</atomic>       <!-- index in the foreground -->
+                      <stored>true</stored>       <!-- store the property value in the index -->
+                      <tokenised>false</tokenised>
+                    </index>
+            </property>
+            <property name="docusign:recipient">
+              <title>Recipient Details</title>
+              <type>d:text</type>
+              <mandatory>true</mandatory>
+              <multiple>true</multiple>
+              <index enabled="true">
+                      <atomic>true</atomic>       <!-- index in the foreground -->
+                      <stored>true</stored>       <!-- store the property value in the index -->
+                      <tokenised>true</tokenised>
+                    </index>
+            </property>
+            <!-- Date the document signature request was sent to the signer -->
+            <property name="docusign:sentDate">
+              <title>Sent Date</title>
+              <type>d:date</type>
+              <mandatory>true</mandatory>
+              <multiple>false</multiple>
+              <index enabled="true">
+                      <atomic>true</atomic>       <!-- index in the foreground -->
+                      <stored>true</stored>       <!-- store the property value in the index -->
+                      <tokenised>false</tokenised>
+                    </index>
+            </property>
+            <!-- Person who sent the signature request  -->
+            <property name="docusign:sentBy">
+              <title>Sent By</title>
+              <type>d:text</type>
+              <mandatory>true</mandatory>
+              <multiple>false</multiple>
+              <index enabled="true">
+                      <atomic>true</atomic>       <!-- index in the foreground -->
+                      <stored>true</stored>       <!-- store the property value in the index -->
+                      <tokenised>false</tokenised>
+                    </index>
+            </property>
+            
+            <!--  Properties relevent for the signed document -->
+            <!-- Date the document signature request was completed by the signer -->
+            <property name="docusign:completedDate">
+              <title>Completed Date</title>
+              <type>d:date</type>
+              <mandatory>false</mandatory>
+              <multiple>false</multiple>
+              <index enabled="true">
+                      <atomic>true</atomic>       <!-- index in the foreground -->
+                      <stored>true</stored>       <!-- store the property value in the index -->
+                      <tokenised>false</tokenised>
+                    </index>
+            </property>
+            <property name="docusign:signedDocumentId">
+              <title>Signed Document Id</title>
+              <type>d:text</type>
+              <mandatory>false</mandatory>
+              <multiple>false</multiple>
+              <index enabled="false">
+                      <atomic>true</atomic>       <!-- index in the foreground -->
+                      <stored>true</stored>       <!-- store the property value in the index -->
+                      <tokenised>false</tokenised>
+                    </index>
+            </property>
+          </properties>
+          <associations>
+                <association name="docusign:signedDocumentAssoc">
+                 <title>Signed Document</title>
+                   <source>
+                      <mandatory>false</mandatory>
+                      <many>false</many>
+                   </source>
+                   <target>
+                      <class>cm:content</class>
+                      <mandatory>false</mandatory>
+                      <many>false</many>
+                   </target>
+                </association>
+                <association name="docusign:signedDocumentTargetAssoc">
+                 <title>Target Folder to store the document in</title>
+                   <source>
+                      <mandatory>false</mandatory>
+                      <many>true</many>
+                   </source>
+                   <target>
+                      <class>cm:folder</class>
+                      <mandatory>false</mandatory>
+                      <many>true</many>
+                   </target>
+                </association>
+                <association name="docusign:supplementalDocumentAssoc">
+                 <title>Supplemental Document</title>
+                   <source>
+                      <mandatory>false</mandatory>
+                      <many>true</many>
+                   </source>
+                   <target>
+                      <class>cm:content</class>
+                      <mandatory>false</mandatory>
+                      <many>true</many>
+                   </target>
+                </association>
+            </associations>
+            
+        </aspect>
+
+
+		<!--  Used to identify the signed document that is completed.   -->
+        <aspect name="docusign:signedDocumentAspect">
+          <title>Signed Document properties</title>
+          <properties> 
+          	<property name="docusign:certificateOfCompletionNodeId">
+              <title>Certificate Of Completion node Id</title>
+              <type>d:text</type>
+              <mandatory>false</mandatory>
+              <multiple>false</multiple>
+              <index enabled="false">
+                      <atomic>true</atomic>       <!-- index in the foreground -->
+                      <stored>true</stored>       <!-- store the property value in the index -->
+                      <tokenised>false</tokenised>
+                    </index>
+            </property>
+          </properties>
+          <associations>
+          	  <child-association name="docusign:certificateOfCompletionAssoc">
+          	  	<title>Certificate Of Completion</title>
+		           <source>
+		              <mandatory>false</mandatory>
+		              <many>true</many>
+		           </source>
+		           <target>
+		              <class>sys:base</class>
+		              <mandatory>false</mandatory>
+		              <many>true</many>
+		           </target>
+		           <duplicate>false</duplicate>
+		           <propagateTimestamps>true</propagateTimestamps>
+		        </child-association>
+        
+           </associations>
+            
+        </aspect>
+
+		<!--  Used to identify the signed document that is completed.   -->
+        <aspect name="docusign:signatureResponseDocumentAspect">
+          <title>Aspect to identify a document that is a response to the signature request, eg certificate</title>
+          <properties> 
+          	<property name="docusign:signatureResponseDocumentType">
+              <title>Document Type for the Response Document</title>
+              <type>d:text</type>
+              <mandatory>false</mandatory>
+              <multiple>false</multiple>
+              <index enabled="false">
+                      <atomic>true</atomic>       <!-- index in the foreground -->
+                      <stored>true</stored>       <!-- store the property value in the index -->
+                      <tokenised>false</tokenised>
+                    </index>
+            </property>
+            </properties>    
+        </aspect>
+		
+
+	
+		<aspect name="docusign:appConfigurationAspect">
+	          <title>Docusign Configuration</title>
+	          <properties>
+				
+	          	<property name="docusign:clientId">
+	              <title>Docusign Client Id (API ID)</title>
+	              <type>d:text</type>
+	              <mandatory>true</mandatory>
+	              <multiple>false</multiple>
+	              <index enabled="false">
+	                      <atomic>true</atomic>       <!-- index in the foreground -->
+	                      <stored>true</stored>       <!-- store the property value in the index -->
+	                      <tokenised>false</tokenised>
+	                    </index>
+	            </property>
+				
+				<property name="docusign:userId">
+	              <title>Docusign User Id</title>
+	              <type>d:text</type>
+	              <mandatory>true</mandatory>
+	              <multiple>false</multiple>
+	              <index enabled="false">
+	                      <atomic>true</atomic>       <!-- index in the foreground -->
+	                      <stored>true</stored>       <!-- store the property value in the index -->
+	                      <tokenised>false</tokenised>
+	                    </index>
+	            </property>
+				
+				<property name="docusign:targetAccount">
+	              <title>Target Account</title>
+	              <type>d:text</type>
+	              <mandatory>true</mandatory>
+	              <multiple>false</multiple>
+	              <index enabled="false">
+	                      <atomic>true</atomic>       <!-- index in the foreground -->
+	                      <stored>true</stored>       <!-- store the property value in the index -->
+	                      <tokenised>false</tokenised>
+	                    </index>
+	            </property>
+	            
+				<property name="docusign:authServerURL">
+	              <title>Docusign Auth Server URL</title>
+	              <type>d:text</type>
+	              <mandatory>true</mandatory>
+	              <multiple>false</multiple>
+	              <index enabled="false">
+	                      <atomic>true</atomic>       <!-- index in the foreground -->
+	                      <stored>true</stored>       <!-- store the property value in the index -->
+	                      <tokenised>false</tokenised>
+	                    </index>
+	            </property>
+				
+	
+				<property name="docusign:privateKey">
+	              <title>Docusign Private Key</title>
+	              <type>d:text</type>
+	              <mandatory>true</mandatory>
+	              <multiple>false</multiple>
+	              <index enabled="false">
+	                      <atomic>true</atomic>       <!-- index in the foreground -->
+	                      <stored>true</stored>       <!-- store the property value in the index -->
+	                      <tokenised>false</tokenised>
+	                    </index>
+	            </property>
+				
+				  
+	          </properties>
+	        
+	            
+	    </aspect>
+	</aspects>
+</model>

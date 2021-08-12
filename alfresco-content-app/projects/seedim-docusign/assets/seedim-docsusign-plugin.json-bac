@@ -1,0 +1,33 @@
+{
+    "$schema": "../../../extension.schema.json",
+    "$id": "seedim-docusign",
+    "$version": "1.0.0",
+    "$vendor": "Seed Information Management",
+    "$name": "Alfresco Docusign",
+    "$description": "Digital Signatures using Docusign",
+    "$license": "MIT",
+  
+    "routes": [
+      {
+        "id": "my.extension.route",
+        "path": "ext/my/route",
+        "component": "my-extension.main.component"
+      }
+    ],
+  
+    "features": {
+      "navbar": [
+        {
+          "id": "my.extension.nav",
+          "items": [
+            {
+              "id": "my.extension.main",
+              "icon": "extension",
+              "title": "My Extension",
+              "route": "my.extension.route"
+            }
+          ]
+        }
+      ]
+    }
+  }

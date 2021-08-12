@@ -1,0 +1,60 @@
+{
+  "DIGITAL_SIGNATURE":{
+    "DIGITAL_SIGNATURE_DASHBOARD":{
+      "EMPTY_STATE":{
+        "TITLE": "No Signature Documents",
+        "SUBTITLE": "Documents that are part of a Docusign Signature Request"
+      }
+    },
+    "DIALOGS":{
+        "DOCUSIGN": {
+          "MESSAGE":"Message Body",
+          "TITLE":"Message Title",
+          "TITLE_REQUIRED":"Title is required",
+          "TITLE_MAX_LENGTH_EXCEEDED": "Title cannot be more than 100 characters",
+          "TITLE_DEFAULT_TEXT":"Please Sign the attached document",
+          "EXPIRE_DAYS": "Days Until Expiry",
+          "EXPIRE_DAYS_REQUIRED": "Days Until Expiry is required",
+          "EXPIRE_WARN": "Send Warning before expiry (days)",
+          "EXPIRE_WARN_REQUIRED": "Expire Warning Days is required",
+          "REMIND_DAYS": "Send Reminder After (days)",
+          "REMIND_DAYS_REQUIRED": "Send Remind After is required",
+          "REMIND_FREQUENCY": "Send Reminder every (days) after first reminder",
+          "REMIND_FREQUENCY_REQUIRED": "Remind Frequency is required",
+          "SIGNEE_NAME": "Name",
+          "SIGNEE_NAME_REQUIRED": "A Repient Name is required",
+          "SIGNEE_EMAIL": "Email",
+          "SIGNEE_EMAIL_REQUIRED": "A valid Email is required",
+          "RECIPIENT_ACTION": "Recipient Action",
+          "SIGNEE_DOCUMENT_FOLDER": "Signed Document Destination Folder",
+          "SIGNEE_DOCUMENT_FOLDER_REQUIRED": "A Signed Document Destination Folder is required",
+          "SUPPORTING_DOCUMENTS": "Supporting Documents",
+          "TITLE_CREATE": "Docusign Signature Request",
+          "RECIPIENT":{
+            "ADD":"Add Recipient",
+            "REMOVE":"Remove"
+          },
+          "MAX_EXCEEDED":"Greater than allowed max",
+          "MIN_EXCEEDED":"Less than allowed min",
+          "EXPIRE_WARN_LESS_THAN_ERROR": "Expire Warn must be less than Expire Days",
+          "REMIND_DAYS_LESS_THAN_ERROR": "Remind Days must be less than Expire Days",
+          "NO_SIGNER_ERROR": "At least once Recipient must sign the document"
+        },
+        "ACTIONS":{
+          "SIGN": "Request Signature"
+        }
+      },
+    "ACTIONS":{
+          "REVIEW_SIGNED_DOCUMENT":"Review Signed Document",
+          "OPEN_CERTIFICATE_OF_COMPLETION":"Certificate of Completion",
+          "REQUEST_SIGNATURE":"Request Signature",
+          "REQUEST_SIGNATURE_SUCCESS":"The Signature request has been sent to Docusign",
+          "ERRORS":{
+            "SIGNATURE_REQUEST_ERROR": "The Docusign signature request failed"
+          }
+        }
+  },
+  "NODE_SELECTOR":{
+    "SELECT_DESTINATION_FOLDER": "OK"
+  }
+}

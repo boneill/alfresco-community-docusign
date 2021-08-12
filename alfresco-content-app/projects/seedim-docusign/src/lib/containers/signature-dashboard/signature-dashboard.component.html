@@ -1,0 +1,140 @@
+<aca-page-layout>
+  <aca-page-layout-header>
+    <adf-toolbar class="adf-toolbar--inline">
+      <adf-toolbar-title>Signature Requests</adf-toolbar-title>
+
+      <div class="adf-toolbar--spacer"></div>
+    </adf-toolbar>
+  </aca-page-layout-header>
+
+  <aca-page-layout-content>
+    <div class="main-content">
+      <adf-toolbar>
+        <div class="adf-toolbar--spacer"></div>
+        <div class="filter-container">
+          <mat-form-field>
+            <mat-select
+              (selectionChange)="filterChanged($event)"
+              [(value)]="status"
+            >
+              <mat-option value="sent">Sent</mat-option>
+              <mat-option value="delivered">Delivered</mat-option>
+              <mat-option value="completed">Completed</mat-option>
+              <mat-option value="*">All</mat-option>
+              <mat-option value="voided">Voided</mat-option>
+            </mat-select>
+          </mat-form-field>
+
+          <mat-form-field>
+            <mat-select
+              (selectionChange)="filterChanged($event)"
+              [(value)]="signaturesRequestedBy"
+            >
+              <mat-option value="me">My Documents</mat-option>
+              <mat-option value="everyone">Everyones Documents</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+      </adf-toolbar>
+
+      <adf-search
+        #search
+        [searchTerm]="searchTerm"
+        (resultLoaded)="onSearchResultLoaded($event)"
+      >
+      </adf-search>
+
+      <adf-document-list
+        #documentList
+        [currentFolderId]="null"
+        [node]="resultNodePageList"
+        [contextMenuActions]="false"
+        [contentActions]="true"
+        [sorting]="['properties.docusign:sentDate', 'desc']"
+        (node-dblclick)="navigateTo($event.detail?.node)"
+      >
+        <content-actions>
+          <!-- custom handler -->
+          <content-action
+            icon="assignment_turned_in"
+            target="document"
+            [disableWithNoPermission]="true"
+            [disabled]="isViewSignedDisabled"
+            title="View Signed Document"
+            (execute)="navigateToSigned($event)"
+          >
+          </content-action>
+        </content-actions>
+        <data-columns>
+          <data-column key="$thumbnail" type="image"></data-column>
+          <data-column
+            title="Name"
+            key="name"
+            sortable="true"
+            class="full-width ellipsis-cell"
+          >
+          </data-column>
+          <data-column
+            title="Request Status"
+            key="properties.docusign:status"
+            sortable="true"
+            class="desktop-only"
+          >
+          </data-column>
+
+          <data-column
+            title="Recipients"
+            id="properties.docusign:recipient"
+            key="properties.docusign:recipient"
+            sortable="false"
+            class="full-width ellipsis-cell"
+          >
+            <ng-template let-entry="$implicit">
+              <recipient-column
+                [propertyValue]="entry.data.getValue(entry.row, entry.col)"
+              ></recipient-column>
+            </ng-template>
+          </data-column>
+
+          <data-column
+            title="Sent By"
+            key="properties.docusign:sentBy"
+            sortable="true"
+            class="desktop-only"
+          >
+          </data-column>
+          <data-column
+            title="Sent Date"
+            key="properties.docusign:sentDate"
+            type="date"
+            format="medium"
+            sortable="true"
+            class="desktop-only"
+          >
+          </data-column>
+          <data-column
+            title="Completed On"
+            key="properties.docusign:completedDate"
+            type="date"
+            format="medium"
+            sortable="true"
+            class="desktop-only"
+          >
+          </data-column>
+        </data-columns>
+        <adf-custom-empty-content-template>
+          <adf-empty-content
+            icon="star_rate"
+            title="DIGITAL_SIGNATURE.DIGITAL_SIGNATURE_DASHBOARD.EMPTY_STATE.TITLE"
+            subtitle="DIGITAL_SIGNATURE.DIGITAL_SIGNATURE_DASHBOARD.EMPTY_STATE.SUBTITLE"
+          >
+          </adf-empty-content>
+        </adf-custom-empty-content-template>
+      </adf-document-list>
+      <adf-pagination
+        *ngIf="!documentList.isEmpty()"
+        [target]="documentList"
+      ></adf-pagination>
+    </div>
+  </aca-page-layout-content>
+</aca-page-layout>

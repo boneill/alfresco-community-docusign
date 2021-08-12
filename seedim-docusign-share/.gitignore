@@ -1,0 +1,6 @@
+alfresco.log*
+ target/
+ .settings/
+ .project
+ .classpath
+ share.log*

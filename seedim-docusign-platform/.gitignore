@@ -1,0 +1,9 @@
+alfresco.log*
+ target/
+ .settings/
+ .project
+ .classpath
+ alf_data_dev/
+ solr.log*
+ hs_err_*
+ /bin

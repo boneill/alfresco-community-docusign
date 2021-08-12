@@ -1,0 +1,239 @@
+<extension>
+  <modules>
+      <module>
+       <id>Add dependencies</id>
+       <version>1.0</version>
+       <auto-deploy>true</auto-deploy>
+       <customizations>
+          <customization>
+            <targetPackageRoot>org.alfresco</targetPackageRoot>
+            <dependencies>
+              <!-- <css>/res/dependencies/styles.css</css> -->
+              <js>/res/dependencies/seedim-docusign.js</js>
+               <!-- <js>/res/components/documentlibrary/seedim-docusign.js</js> -->
+            </dependencies>
+          <sourcePackageRoot></sourcePackageRoot>
+        </customization>
+      </customizations>
+    </module> 
+     <module>
+        <id>Seedim Signature Form Configuration</id>
+       <version>1.0</version>
+       <auto-deploy>true</auto-deploy>
+      <configurations>
+
+       <config>
+                <forms>
+                    <dependencies>
+                        <js src="/dependencies/seedim-docusign.js"/>
+                    </dependencies>
+                </forms>
+       </config>
+       <config evaluator="string-compare" condition="sendForSignatureAction"> <!-- ID for the Repository Action that this form is associated with -->
+         <forms>
+              <form>
+                  <field-visibility>
+                  	  <show id="title"/>
+                      <show id="message"/>
+                      <!-- <show id="supplementalDocumentAssoc" /> -->
+                  	  <show id="signedDocumentTargetAssoc"/>
+    	           	  <show id="action1"/>
+                      <show id="name1"/>
+                      <show id="email1"/>
+                      <show id="action2"/>
+                      <show id="name2"/>
+                      <show id="email2"/>
+                      <show id="action3"/>
+                      <show id="name3"/>
+                      <show id="email3"/>
+                      
+                      <show id="expireDays"/>
+                      <show id="expireWarn"/>
+                      <show id="reminderDelay"/>
+                      <show id="reminderFrequency"/>
+                      
+                  </field-visibility>
+                  <appearance>
+                  	<set appearance="fieldset" label="Signature Request Title" id="signature-request-title"/>
+                  	<set appearance="fieldset" label="Signature Request Message" id="signature-request-message"/>
+                  	<set appearance="fieldset" label="Supporting Documents" id="signature-request-supporting-documents"/>
+                  	<set appearance="fieldset" label="Signed Document Destination Folder" id="signed-document-folder"/>
+                  	<set appearance="fieldset" label="Recipient 1" id="recipient1-details"/>
+                  	<set appearance="fieldset" label="Recipient 2" id="recipient2-details"/> 
+                  	<set appearance="fieldset" label="Recipient 3" id="recipient3-details"/> 
+                  	<set appearance="fieldset" label="Expiry and Reminders" id="expiry-reminders-details" template="/org/alfresco/components/form/2-column-set.ftl"/>  
+                  	
+                  	
+                  	<field id="title" label-id="seedim.action.sendForSignatureAction.form.field.title" set="signature-request-title">
+                  		<control template='/org/alfresco/components/form/controls/textfield.ftl'>                      		
+                  				<control-param name="maxLength">100</control-param>
+               			</control>
+                      </field>
+                  	<field id="message" label-id="seedim.action.sendForSignatureAction.form.field.message" set="signature-request-message">
+                      </field>
+                  	 <field id="signedDocumentTargetAssoc" label-id="seedim.action.sendForSignatureAction.form.field.targetFolderId" set="signed-document-folder">
+                      		<!-- <control template='/org/alfresco/components/form/controls/association.ftl'> -->
+                      		<control template='/form-controls/association_folder.ftl'>
+                  				<control-param name="startLocation">{parent}</control-param>
+               				</control>
+           
+                      </field>
+                  	  <field id="action1" label-id="seedim.action.sendForSignatureAction.form.field.action" set="recipient1-details">
+                  	  	<control template="/org/alfresco/components/form/controls/selectone.ftl" >
+                            <control-param name="options">,sign,cc</control-param>
+                            <control-param name="size">1</control-param>
+                      	</control>
+                      </field>
+                      <field id="name1" label-id="seedim.action.sendForSignatureAction.form.field.name" set="recipient1-details">
+                      </field>
+                      <field id="email1" label-id="seedim.action.sendForSignatureAction.form.field.email" set="recipient1-details">
+                      	<constraint-handlers>
+                     		<constraint type="REGEX" validation-handler="Alfresco.forms.validation.email" event="keyup" />
+                  		</constraint-handlers>  
+                      </field>
+                      <field id="action2" label-id="seedim.action.sendForSignatureAction.form.field.action" set="recipient2-details">
+                      	<control template="/org/alfresco/components/form/controls/selectone.ftl" >
+                            <control-param name="options">,sign,cc</control-param>
+                            <control-param name="size">1</control-param>
+                      	</control>
+                      </field>
+                      <field id="name2" label-id="seedim.action.sendForSignatureAction.form.field.name" set="recipient2-details">
+                      </field>
+                      <field id="email2" label-id="seedim.action.sendForSignatureAction.form.field.email" set="recipient2-details">
+                      <constraint-handlers>
+                     		<constraint type="REGEX" validation-handler="Alfresco.forms.validation.email" event="keyup" />
+                  		</constraint-handlers> 
+                      </field>
+                      <field id="action3" label-id="seedim.action.sendForSignatureAction.form.field.action" set="recipient3-details">
+                      	<control template="/org/alfresco/components/form/controls/selectone.ftl" >
+                            <control-param name="options">,sign,cc</control-param>
+                            <control-param name="size">1</control-param>
+                      	</control>
+                      </field>
+                      <field id="name3" label-id="seedim.action.sendForSignatureAction.form.field.name" set="recipient3-details">
+                      </field>
+                      <field id="email3" label-id="seedim.action.sendForSignatureAction.form.field.email" set="recipient3-details">
+                      <constraint-handlers>
+                     		<constraint type="REGEX" validation-handler="Alfresco.forms.validation.email" event="keyup" />
+                  		</constraint-handlers> 
+                      </field>
+  
+
+                      <field id="expireDays" label-id="seedim.action.sendForSignatureAction.form.field.expireDays" help-id="seedim.action.sendForSignatureAction.form.field.expireDays.help" set="expiry-reminders-details">
+                  			<constraint-handlers>
+                  				<!-- <constraint type="NUMBER" validation-handler="Alfresco.forms.validation.number" event="keyup" /> -->
+                     			<constraint type="REGEX" validation-handler="Alfresco.forms.validation.checkExpireDays" event="keyup" />
+                  			</constraint-handlers>
+                  			
+                      </field>
+                      <field id="expireWarn" label-id="seedim.action.sendForSignatureAction.form.field.expireWarn" help-id="seedim.action.sendForSignatureAction.form.field.expireWarn.help" set="expiry-reminders-details">
+                      	<!-- <control template='/form-controls/number.ftl'>
+                  				<control-param name="javascriptParam">onkeyup</control-param>
+     							<control-param name="javascriptParamFunc">invoiceValueOnKeyDown</control-param>
+     							<control-param name="otherInput">expireDays</control-param>
+               			</control> -->
+                  		<constraint-handlers>
+                     		<!-- <constraint type="NUMBER" validation-handler="Alfresco.forms.validation.number" event="keyup" /> -->
+                     		<constraint type="REGEX" validation-handler="Alfresco.forms.validation.checkExpireWarn" event="keyup" />
+                  		</constraint-handlers>
+                  		
+                      </field>
+                      <field id="reminderDelay" label-id="seedim.action.sendForSignatureAction.form.field.reminderDelay" help-id="seedim.action.sendForSignatureAction.form.field.reminderDelay.help" set="expiry-reminders-details">
+                  		<constraint-handlers>
+                     		<!-- <constraint type="NUMBER" validation-handler="Alfresco.forms.validation.number" event="keyup" /> -->
+                     		<constraint type="REGEX" validation-handler="Alfresco.forms.validation.checkReminderDelay" event="keyup" />
+                  		</constraint-handlers>
+                      </field>
+                      <field id="reminderFrequency" label-id="seedim.action.sendForSignatureAction.form.field.reminderFrequency" help-id="seedim.action.sendForSignatureAction.form.field.reminderFrequency.help" set="expiry-reminders-details">
+                  		<constraint-handlers>
+                     		<!-- <constraint type="NUMBER" validation-handler="Alfresco.forms.validation.number" event="keyup" /> -->
+                     		<constraint type="REGEX" validation-handler="Alfresco.forms.validation.checkReminderFrequency" event="keyup" />
+                  		</constraint-handlers>
+                      </field>
+                      <!-- <field id="supplementalDocumentAssoc" label-id="seedim.action.sendForSignatureAction.form.field.supplementalDocument" set="signature-request-supporting-documents" >
+                    	<control template="/form-controls/association_document.ftl">
+		                     <control-param name="showTargetLink">true</control-param>
+		                     <control-param name="startLocation">{parent}</control-param>
+		                  </control>
+		            </field> -->
+                      
+                  </appearance>
+              </form>
+         </forms>
+    	</config>
+       </configurations>
+    </module> 
+    <module>
+			<id>Seedim Signature Actions</id>
+			<description>Expose the signature action doclib action UI</description>
+			<version>1.0</version>
+			<auto-deploy>true</auto-deploy>
+			<configurations>
+				<config evaluator="string-compare" condition="DocLibActions">
+					<actions>
+						<action id="seedim-sendForSignatureAction" type="javascript" label="seedim.docusign.action.sendForSignatureAction.label" icon="document-approve">
+							 <param name="function">onActionFormDialog</param>
+							 <!-- <param name="function">onActionFormDialogSeedim</param> -->
+							 <param name="itemKind">seedimaction</param>
+							 <param name="itemId">sendForSignatureAction</param> <!-- Repository action id = Spring Bean id -->
+							 <param name="mode">create</param>
+							 <param name="destination">{node.nodeRef}</param>
+							 <param name="successMessage">message.seedim.docusign.sendForSignatureAction.successful</param>
+							 <!-- <param name="failure">signatureActionFailure</param> -->
+							 <param name="failureMessage">message.seedim.docusign.sendForSignatureAction.failed</param>
+							 <evaluator>seedim.evaluator.doclib.action.isDocument</evaluator>
+							 <evaluator negate="true">seedim.evaluator.doclib.action.hasDigitalSignatureAspect</evaluator>
+							 <evaluator>seedim.evaluator.doclib.action.signatureRequestMimetype</evaluator>
+						 </action>
+						 <action id="seedim-goToSignedDocument" type="pagelink" label="seedim.action.goToSignedDocument" icon="select-all">
+							<param name="page">document-details?nodeRef=workspace://SpacesStore/{node.properties.docusign:signedDocumentId}</param>
+							 <evaluator>seedim.evaluator.doclib.action.hasDigitalSignatureAspect</evaluator>
+							<evaluator>seedim.evaluator.doclib.action.signatureComplete</evaluator>
+							<evaluator negate="true">seedim.evaluator.doclib.action.isSignedDocument</evaluator>
+						 </action>
+					</actions>
+					<actionGroups>
+						<actionGroup id="document-browse">
+							<action index="10" id="seedim-sendForSignatureAction" />
+							 <action index="10" id="seedim-goToSignedDocument" />
+						 </actionGroup>
+						 <actionGroup id="document-details">
+							<action index="10" id="seedim-sendForSignatureAction" />
+							 <action index="10" id="seedim-goToSignedDocument" />
+						 </actionGroup>
+   	
+					</actionGroups>
+				</config>
+			</configurations>
+		</module>
+		
+	<module>
+      <id>seedim-docusign-Custom Widgets</id>
+      <version>1.0</version>
+      <auto-deploy>true</auto-deploy>
+      <configurations>
+        <config evaluator="string-compare" condition="WebFramework" replace="false">
+          <web-framework>
+            <dojo-pages>
+              <packages>
+                <package name="docusign" location="js/docusign"/>
+              </packages>
+            </dojo-pages>
+          </web-framework>
+        </config>
+      </configurations>
+    </module>
+     <module>
+         <id>Share Header Customisation</id>
+            <version>1.0</version>
+            <auto-deploy>true</auto-deploy>
+             <customizations>
+                <customization>
+                    <targetPackageRoot>org.alfresco.share.header</targetPackageRoot>
+                    <sourcePackageRoot>au.com.seedim.docusign.share.header</sourcePackageRoot>
+                </customization>
+            </customizations>
+     </module>
+  
+  </modules>
+</extension>

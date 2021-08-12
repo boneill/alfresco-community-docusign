@@ -1,0 +1,15 @@
+.invisible {
+  display: block;
+  visibility: hidden;
+  height: 0;
+  width: 0;
+}
+
+.mat-card-row-field {
+  margin-left: 8px;
+}
+
+.outline {
+  border-style: dotted;
+  border-width: thin;
+}

@@ -1,0 +1,17 @@
+<webscript>
+   <shortname>Sign Document</shortname>
+   <description>Send a document to the signee for signing via docusign (Single User Signature support only)</description>
+   <url>/seedim/docusign/sign?signerEmail={signerEmail}
+    &amp;signerName={signerName}
+    &amp;ccEmail={ccEmail?}&amp;ccName={ccName?}
+    &amp;documentId={documentId}
+    &amp;targetFolderId={targetFolderId}
+   	&amp;expireDays={Number of days until signature request expires?}
+   	&amp;expireWarn={days from expiration to send warning}
+   	&amp;reminderDays={Days from Sent to send a reminder}
+   	&amp;reminderFrequency={days to send reminders}</url>
+  <format default="json">extension</format>
+  <authentication>user</authentication>
+  <transaction>required</transaction>
+  <family>SeedIM Docusign</family>
+</webscript>

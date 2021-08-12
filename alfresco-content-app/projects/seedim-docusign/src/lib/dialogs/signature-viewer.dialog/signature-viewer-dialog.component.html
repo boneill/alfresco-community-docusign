@@ -1,0 +1,14 @@
+<h2 mat-dialog-title>
+  View Signature Document
+</h2>
+<mat-dialog-content>
+  <adf-viewer [showViewer]="true" [overlayMode]="false" [nodeId]="nodeId">
+  </adf-viewer>
+</mat-dialog-content>
+<mat-dialog-actions class="adf-dialog-buttons">
+  <span class="adf-fill-remaining-space"></span>
+
+  <button mat-button id="adf-folder-cancel-button" mat-dialog-close>
+    {{ 'CORE.FOLDER_DIALOG.CANCEL_BUTTON.LABEL' | translate }}
+  </button>
+</mat-dialog-actions>

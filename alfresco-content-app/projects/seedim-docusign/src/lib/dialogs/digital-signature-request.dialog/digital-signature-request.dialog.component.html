@@ -1,0 +1,475 @@
+<h2 mat-dialog-title>
+  {{ createTitle | translate }}
+</h2>
+
+<mat-dialog-content>
+  <!--<form [formGroup]="form" (submit)="submit()">-->
+  <form [formGroup]="form">
+    <mat-form-field class="adf-full-width">
+      <input
+        id="title"
+        matInput
+        required
+        placeholder="{{
+          'DIGITAL_SIGNATURE.DIALOGS.DOCUSIGN.TITLE' | translate
+        }}"
+        formControlName="title"
+      />
+      <mat-hint *ngIf="form.controls['title'].dirty">
+        <mat-error *ngIf="form.controls['title'].hasError('required')">
+          {{ 'DIGITAL_SIGNATURE.DIALOGS.DOCUSIGN.TITLE_REQUIRED' | translate }}
+        </mat-error>
+        <mat-error *ngIf="form.controls['title'].hasError('maxlength')">
+          {{
+            'DIGITAL_SIGNATURE.DIALOGS.DOCUSIGN.TITLE_MAX_LENGTH_EXCEEDED'
+              | translate
+          }}
+        </mat-error>
+      </mat-hint>
+    </mat-form-field>
+
+    <mat-form-field class="adf-full-width">
+      <textarea
+        cdkTextareaAutosize
+        cdkAutosizeMinRows="2"
+        cdkAutosizeMaxRows="5"
+        id="message"
+        matInput
+        placeholder="{{
+          'DIGITAL_SIGNATURE.DIALOGS.DOCUSIGN.MESSAGE' | translate
+        }}"
+        formControlName="message"
+      ></textarea>
+    </mat-form-field>
+
+    <mat-form-field class="adf-full-width">
+      <input
+        id="signedDocumentFolder"
+        matInput
+        readonly="true"
+        required
+        placeholder="{{
+          'DIGITAL_SIGNATURE.DIALOGS.DOCUSIGN.SIGNEE_DOCUMENT_FOLDER'
+            | translate
+        }}"
+        [formControl]="form.controls['signedDocumentFolderName']"
+      />
+
+      <button
+        name="open-select-folder-dialog"
+        id="open-select-folder-dialog-button"
+        mat-button
+        matSuffix
+        mat-icon-button
+        title="{{
+          'DIGITAL_SIGNATURE.DIALOGS.DOCUSIGN.SIGNEE_DOCUMENT_FOLDER'
+            | translate
+        }}"
+        (click)="selectSignedFolderLocation()"
+      >
+        <mat-icon>folder</mat-icon>
+      </button>
+    </mat-form-field>
+
+    <!-- <mat-card class="outline">
+      <mat-card-header>
+        <mat-card-title>supplemental Documents</mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+
+    <supplemental-documents></supplemental-documents>
+</mat-card-content>
+</mat-card>
+    <mat-form-field class="adf-full-width">
+      <input
+        id="supportingDocuments"
+        matInput
+        readonly="true"
+        required
+        placeholder="{{
+          'DIGITAL_SIGNATURE.DIALOGS.DOCUSIGN.SUPPORTING_DOCUMENTS' | translate
+        }}"
+        [formControl]="form.controls['signedDocumentFolderName']"
+      />
+
+      <button
+        name="open-select-supporting-documents-dialog"
+        id="open-select-supporting-documents-dialog-button"
+        mat-button
+        matSuffix
+        mat-icon-button
+        title="{{
+          'DIGITAL_SIGNATURE.DIALOGS.DOCUSIGN.SUPPORTING_DOCUMENTS' | translate
+        }}"
+        (click)="selectSupportingDocuments()"
+      >
+        <mat-icon>folder</mat-icon>
+      </button>
+    </mat-form-field>
+  -->
+    <br />
+
+    <div
+      formArrayName="recipients"
+      *ngFor="let recipient of recipientControls; let i = index"
+    >
+      <mat-card class="outline">
+        <mat-card-header>
+          <mat-card-title>Recipient {{ i + 1 }}</mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+          <div [formGroupName]="i">
+            <mat-form-field class="adf-full-width">
+              <mat-select
+                id="recipientAction+i"
+                matInput
+                required
+                placeholder="{{
+                  'DIGITAL_SIGNATURE.DIALOGS.DOCUSIGN.RECIPIENT_ACTION'
+                    | translate
+                }}"
+                formControlName="action"
+              >
+                <mat-option value="sign">Sign</mat-option>
+                <mat-option value="cc">Carbon Copy</mat-option>
+              </mat-select>
+
+              <mat-hint>
+                <mat-error *ngIf="recipient.get('action').errors">
+                  {{ recipient.controls['action'].value | json }}
+                </mat-error>
+              </mat-hint>
+            </mat-form-field>
+
+            <mat-form-field class="adf-full-width">
+              <input
+                id="signeeName+i"
+                matInput
+                required
+                placeholder="{{
+                  'DIGITAL_SIGNATURE.DIALOGS.DOCUSIGN.SIGNEE_NAME' | translate
+                }}"
+                formControlName="name"
+              />
+              <mat-hint *ngIf="recipient.controls['name'].dirty">
+                <span *ngIf="recipient.controls['name'].errors?.required">
+                  {{
+                    'DIGITAL_SIGNATURE.DIALOGS.DOCUSIGN.SIGNEE_NAME_REQUIRED'
+                      | translate
+                  }}
+                </span>
+
+                <span
+                  *ngIf="
+                    !recipient.controls['name'].errors?.required &&
+                    recipient.controls['name'].errors?.message
+                  "
+                >
+                  {{ recipient.controls['name'].errors?.message | translate }}
+                </span>
+              </mat-hint>
+            </mat-form-field>
+            <mat-form-field class="adf-full-width">
+              <input
+                type="email"
+                id="signeeEmail+i"
+                matInput
+                required
+                placeholder="{{
+                  'DIGITAL_SIGNATURE.DIALOGS.DOCUSIGN.SIGNEE_EMAIL' | translate
+                }}"
+                formControlName="email"
+              />
+
+              <mat-hint *ngIf="recipient.controls['email'].dirty">
+                <span *ngIf="recipient.controls['email'].invalid">
+                  {{
+                    'DIGITAL_SIGNATURE.DIALOGS.DOCUSIGN.SIGNEE_EMAIL_REQUIRED'
+                      | translate
+                  }}
+                </span>
+
+                <span
+                  *ngIf="
+                    !recipient.controls['email'].errors?.required &&
+                    recipient.controls['email'].errors?.message
+                  "
+                >
+                  {{ recipient.controls['email'].errors?.message | translate }}
+                </span>
+              </mat-hint>
+            </mat-form-field>
+          </div>
+        </mat-card-content>
+        <mat-card-actions>
+          <button id="adf-recipient-add-button" (click)="addRecipient()">
+            {{ 'DIGITAL_SIGNATURE.DIALOGS.DOCUSIGN.RECIPIENT.ADD' | translate }}
+          </button>
+
+          <button *ngIf="i > 0" mat-button (click)="removeRecipient(i)">
+            Remove
+          </button>
+        </mat-card-actions>
+      </mat-card>
+      <br />
+    </div>
+
+    <mat-accordion>
+      <mat-expansion-panel
+        (opened)="expirePanelOpenState = true"
+        (closed)="expirePanelOpenState = false"
+        class="outline"
+      >
+        <mat-expansion-panel-header>
+          <mat-panel-title>
+            Expire and Reminders
+          </mat-panel-title>
+          <mat-panel-description>
+            Default Values: Remind after
+            {{ form.controls['remindDays'].value }} days. Expire after
+            {{ form.controls['expireDays'].value }} days.
+          </mat-panel-description>
+        </mat-expansion-panel-header>
+        <p>
+          <mat-label>Expiry Details</mat-label>
+          <br /><br />
+          <mat-form-field class="mat-card-row-field">
+            <input
+              id="expireDays"
+              matInput
+              required
+              type="number"
+              min="0"
+              max="90"
+              placeholder="{{
+                'DIGITAL_SIGNATURE.DIALOGS.DOCUSIGN.EXPIRE_DAYS' | translate
+              }}"
+              [formControl]="form.controls['expireDays']"
+            />
+
+            <mat-hint *ngIf="form.controls['expireDays'].dirty">
+              <span *ngIf="form.controls['expireDays'].errors?.required">
+                {{
+                  'DIGITAL_SIGNATURE.DIALOGS.DOCUSIGN.EXPIRE_DAYS_REQUIRED'
+                    | translate
+                }}
+              </span>
+
+              <span
+                *ngIf="
+                  !form.controls['expireDays'].errors?.required &&
+                  form.controls['expireDays'].errors?.message
+                "
+              >
+                {{ form.controls['expireDays'].errors?.message | translate }}
+              </span>
+              <mat-error *ngIf="form.controls['expireDays'].hasError('min')">
+                {{
+                  'DIGITAL_SIGNATURE.DIALOGS.DOCUSIGN.MIN_EXCEEDED' | translate
+                }}
+              </mat-error>
+              <mat-error *ngIf="form.controls['expireDays'].hasError('max')">
+                {{
+                  'DIGITAL_SIGNATURE.DIALOGS.DOCUSIGN.MAX_EXCEEDED' | translate
+                }}
+              </mat-error>
+            </mat-hint>
+          </mat-form-field>
+
+          <mat-form-field class="mat-card-row-field">
+            <input
+              id="expireWarn"
+              matInput
+              required
+              min="0"
+              max="21"
+              type="number"
+              placeholder="{{
+                'DIGITAL_SIGNATURE.DIALOGS.DOCUSIGN.EXPIRE_WARN' | translate
+              }}"
+              [formControl]="form.controls['expireWarn']"
+            />
+
+            <mat-hint
+              *ngIf="
+                form.controls['expireWarn'].dirty ||
+                form.controls['expireWarn'].hasError('notLessThan')
+              "
+            >
+              <span *ngIf="form.controls['expireWarn'].errors?.required">
+                {{
+                  'DIGITAL_SIGNATURE.DIALOGS.DOCUSIGN.EXPIRE_WARN_REQUIRED'
+                    | translate
+                }}
+              </span>
+
+              <span
+                *ngIf="
+                  !form.controls['expireWarn'].errors?.required &&
+                  form.controls['expireWarn'].errors?.message
+                "
+              >
+                {{ form.controls['expireWarn'].errors?.message | translate }}
+              </span>
+              <mat-error *ngIf="form.controls['expireWarn'].hasError('min')">
+                {{
+                  'DIGITAL_SIGNATURE.DIALOGS.DOCUSIGN.MIN_EXCEEDED' | translate
+                }}
+              </mat-error>
+              <mat-error *ngIf="form.controls['expireWarn'].hasError('max')">
+                {{
+                  'DIGITAL_SIGNATURE.DIALOGS.DOCUSIGN.MAX_EXCEEDED' | translate
+                }}
+              </mat-error>
+              <mat-error
+                *ngIf="form.controls['expireWarn'].hasError('notLessThan')"
+              >
+                {{
+                  'DIGITAL_SIGNATURE.DIALOGS.DOCUSIGN.EXPIRE_WARN_LESS_THAN_ERROR'
+                    | translate
+                }}
+              </mat-error>
+            </mat-hint>
+          </mat-form-field>
+          <br /><br />
+
+          <!--Reminder details-->
+          <mat-label>Reminder Details</mat-label>
+          <br /><br />
+          <mat-form-field class="mat-card-row-field">
+            <input
+              id="remindDays"
+              matInput
+              required
+              type="number"
+              min="0"
+              max="80"
+              placeholder="{{
+                'DIGITAL_SIGNATURE.DIALOGS.DOCUSIGN.REMIND_DAYS' | translate
+              }}"
+              [formControl]="form.controls['remindDays']"
+            />
+
+            <mat-hint
+              *ngIf="
+                form.controls['remindDays'].dirty ||
+                form.controls['remindDays'].hasError('notLessThan')
+              "
+            >
+              <span *ngIf="form.controls['remindDays'].errors?.required">
+                {{
+                  'DIGITAL_SIGNATURE.DIALOGS.DOCUSIGN.REMIND_DAYS_REQUIRED'
+                    | translate
+                }}
+              </span>
+
+              <span
+                *ngIf="
+                  !form.controls['remindDays'].errors?.required &&
+                  form.controls['remindDays'].errors?.message
+                "
+              >
+                {{ form.controls['remindDays'].errors?.message | translate }}
+              </span>
+              <mat-error *ngIf="form.controls['remindDays'].hasError('min')">
+                {{
+                  'DIGITAL_SIGNATURE.DIALOGS.DOCUSIGN.MIN_EXCEEDED' | translate
+                }}
+              </mat-error>
+              <mat-error *ngIf="form.controls['remindDays'].hasError('max')">
+                {{
+                  'DIGITAL_SIGNATURE.DIALOGS.DOCUSIGN.MAX_EXCEEDED' | translate
+                }}
+              </mat-error>
+              <mat-error
+                *ngIf="form.controls['remindDays'].hasError('notLessThan')"
+              >
+                {{
+                  'DIGITAL_SIGNATURE.DIALOGS.DOCUSIGN.REMIND_DAYS_LESS_THAN_ERROR'
+                    | translate
+                }}
+              </mat-error>
+            </mat-hint>
+          </mat-form-field>
+
+          <mat-form-field class="mat-card-row-field">
+            <input
+              id="remindFrequency"
+              matInput
+              required
+              type="number"
+              min="0"
+              max="21"
+              placeholder="{{
+                'DIGITAL_SIGNATURE.DIALOGS.DOCUSIGN.REMIND_FREQUENCY'
+                  | translate
+              }}"
+              [formControl]="form.controls['remindFrequency']"
+            />
+
+            <mat-hint *ngIf="form.controls['remindFrequency'].dirty">
+              <span *ngIf="form.controls['remindFrequency'].errors?.required">
+                {{
+                  'DIGITAL_SIGNATURE.DIALOGS.DOCUSIGN.REMIND_FREQUENCY_REQUIRED'
+                    | translate
+                }}
+              </span>
+
+              <span
+                *ngIf="
+                  !form.controls['remindFrequency'].errors?.required &&
+                  form.controls['remindFrequency'].errors?.message
+                "
+              >
+                {{
+                  form.controls['remindFrequency'].errors?.message | translate
+                }}
+              </span>
+              <mat-error
+                *ngIf="form.controls['remindFrequency'].hasError('min')"
+              >
+                {{
+                  'DIGITAL_SIGNATURE.DIALOGS.DOCUSIGN.MIN_EXCEEDED' | translate
+                }}
+              </mat-error>
+              <mat-error
+                *ngIf="form.controls['remindFrequency'].hasError('max')"
+              >
+                {{
+                  'DIGITAL_SIGNATURE.DIALOGS.DOCUSIGN.MAX_EXCEEDED' | translate
+                }}
+              </mat-error>
+            </mat-hint>
+          </mat-form-field>
+        </p>
+      </mat-expansion-panel>
+    </mat-accordion>
+
+    <!--{{ form.value | json }}-->
+    <!--{{recipients.value | json}}-->
+  </form>
+</mat-dialog-content>
+
+<mat-dialog-actions class="adf-dialog-buttons">
+  <span class="adf-fill-remaining-space"></span>
+
+  <button
+    mat-button
+    id="adf-folder-cancel-button"
+    mat-dialog-close
+    (click)="close()"
+  >
+    {{ 'CORE.FOLDER_DIALOG.CANCEL_BUTTON.LABEL' | translate }}
+  </button>
+
+  <button
+    class="adf-dialog-action-button"
+    id="adf-folder-create-button"
+    mat-button
+    [disabled]="form.invalid"
+    (click)="submit()"
+
+  >
+    {{ 'DIGITAL_SIGNATURE.DIALOGS.ACTIONS.SIGN' | translate }}
+  </button>
+</mat-dialog-actions>

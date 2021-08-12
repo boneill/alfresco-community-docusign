@@ -1,0 +1,62 @@
+version: '3.4'
+services:
+  seedim-docusign-share:
+    image: alfresco-share-seedim-docusign:development
+    build:
+      dockerfile: ./Dockerfile
+      context: ../../../seedim-docusign-share-docker/target
+    environment:
+      CATALINA_OPTS: "-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=0.0.0.0:8888"
+      REPO_HOST: seedim-docusign-acs
+      REPO_PORT: 8080
+    ports:
+      - "${share.port}:8080"
+      - "${share.debug.port}:8888"
+  seedim-docusign-acs:
+    image: alfresco-content-services-seedim-docusign:development
+    build:
+      dockerfile: ./Dockerfile
+      context: ../../../seedim-docusign-platform-docker/target
+    environment:
+      CATALINA_OPTS: "-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=0.0.0.0:8888"
+    command: ["catalina.sh", "run"]
+    ports:
+      - "${acs.port}:8080"
+      - "${acs.debug.port}:8888"
+    volumes:
+      - seedim-docusign-acs-volume:/usr/local/tomcat/alf_data
+      - ../../../seedim-docusign-platform/target/classes:/usr/local/tomcat/hotswap-agent/seedim-docusign-platform/target/classes
+      - ../../../seedim-docusign-integration-tests/target/test-classes:/usr/local/tomcat/hotswap-agent/seedim-docusign-integration-tests/target/test-classes
+    depends_on:
+      - seedim-docusign-postgres
+  seedim-docusign-postgres:
+    image: postgres:9.6
+    environment:
+      POSTGRES_DB: alfresco
+      POSTGRES_USER: alfresco
+      POSTGRES_PASSWORD: alfresco
+    command: postgres -c max_connections=300 -c log_min_messages=LOG
+    ports:
+      - "${postgres.port}:5432"
+    volumes:
+      - seedim-docusign-db-volume:/var/lib/postgresql/data
+  seedim-docusign-ass:
+    image: alfresco/alfresco-search-services:1.2.0
+    environment:
+      SOLR_ALFRESCO_HOST: seedim-docusign-acs
+      SOLR_ALFRESCO_PORT: 8080
+      SOLR_SOLR_HOST: seedim-docusign-ass
+      SOLR_SOLR_PORT: 8983
+      SOLR_CREATE_ALFRESCO_DEFAULTS: alfresco,archive
+    ports:
+      - "8983:8983"
+    volumes:
+      - seedim-docusign-ass-volume:/opt/alfresco-search-services/contentstore
+      - seedim-docusign-ass-volume:/opt/alfresco-search-services/data
+volumes:
+  seedim-docusign-acs-volume:
+    external: true
+  seedim-docusign-db-volume:
+    external: true
+  seedim-docusign-ass-volume:
+    external: true

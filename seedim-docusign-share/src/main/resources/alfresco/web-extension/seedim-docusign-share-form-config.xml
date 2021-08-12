@@ -1,0 +1,98 @@
+<alfresco-config>
+
+<config evaluator="aspect" condition="docusign:digitalSignature">
+        <forms>
+            <form>
+                <field-visibility>
+                    <show id="docusign:documentType" />
+                    <!-- <show id="docusign:signerName" />
+                    <show id="docusign:signerEmail" /> -->
+                    <show id="docusign:recipient" />
+                    <show id="docusign:status" />
+                    <show id="docusign:sentBy" />
+                    <show id="docusign:sentDate" />
+                    <show id="docusign:completedDate" />
+                    <!-- <show id="docusign:supplementalDocumentAssoc" /> -->
+                </field-visibility>
+                
+                <appearance>
+                     <set appearance="fieldset" label="Docusign Signature Request Details" id="docusign-request"/>    
+                    <field id="docusign:documentType" read-only="true" set="docusign-request" />
+                    <!-- <field id="docusign:signerName" read-only="true" set="docusign-request" />
+                    <field id="docusign:signerEmail" read-only="true" set="docusign-request" /> -->
+                    <field id="docusign:recipient" read-only="true" set="docusign-request" />
+                    <field id="docusign:status" read-only="true" set="docusign-request" />
+                    <field id="docusign:sentBy" read-only="true" set="docusign-request" />
+                    <field id="docusign:sentDate" read-only="true" set="docusign-request" />
+                    <field id="docusign:completedDate" read-only="true" set="docusign-request" />
+                    <!-- <field id="docusign:supplementalDocumentAssoc" read-only="true" set="docusign-request" >
+                    	<control template="/org/alfresco/components/form/controls/association.ftl">
+		                     <control-param name="showTargetLink">true</control-param>
+		                     <control-param name="allowNavigationToContentChildren">true</control-param>
+		                  </control>
+		            </field> -->
+                </appearance>
+            </form>
+        </forms>
+    </config>
+
+
+	<config evaluator="aspect" condition="docusign:signedDocumentAspect">
+        <forms>
+            <form>
+                <field-visibility>
+                    <show id="docusign:certificateOfCompletionAssoc" />
+                    <show id="docusign:certificateOfCompletionNodeId" />
+                </field-visibility>
+                
+                <appearance>
+                     <set appearance="fieldset" label="Docusign Signed Document Details" id="docusign-response"/>    
+                    <field id="docusign:certificateOfCompletionAssoc" read-only="true" set="docusign-response">
+		                  <control template="/org/alfresco/components/form/controls/association.ftl">
+		                     <control-param name="showTargetLink">true</control-param>
+		                     <control-param name="allowNavigationToContentChildren">true</control-param>
+		                  </control>
+		            </field>
+                    <field id="docusign:certificateOfCompletionNodeId" read-only="true" set="docusign-response" />
+                </appearance>
+            </form>
+        </forms>
+    </config>
+	    
+    
+<!-- ######################### Config Aspect Start ####################-->
+    <config evaluator="aspect" condition="docusign:appConfigurationAspect">
+        <forms>
+            <form>
+                <field-visibility>
+                    <show id="docusign:clientId" />
+                    <show id="docusign:userId" />
+                    <show id="docusign:targetAccount" />
+                    <show id="docusign:authServerURL" />
+                    <show id="docusign:privateKey" />
+                   <!--  <show id="docusign:privateKeyPemFileAssoc" /> -->
+                </field-visibility>
+                
+                <appearance>
+                     <set appearance="fieldset" label="Docusign Configuration" id="docusign-conf"/>    
+                    <field id="docusign:clientId" set="docusign-conf" />
+                    <field id="docusign:userId" set="docusign-conf" />
+                    <field id="docusign:targetAccount" set="docusign-conf" />
+                    <field id="docusign:authServerURL" set="docusign-conf" />
+                    <field id="docusign:privateKey" set="docusign-conf">
+                    	 <control template="/org/alfresco/components/form/controls/textarea.ftl">
+                    	 	<control-param name="rows">40</control-param>
+                    	 	<control-param name="maxLength">3000</control-param>
+                  			<control-param name="style">width: 95%</control-param>
+                    	 </control>
+                    </field>
+                </appearance>
+            </form>
+        </forms>
+    </config>
+    
+    
+    <!-- ######################### End ####################-->
+    
+    
+</alfresco-config>

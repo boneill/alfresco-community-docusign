@@ -1,0 +1,229 @@
+<alfresco-config>
+
+   <!-- Global config section -->
+   <config replace="true">
+      <flags>
+         <!--
+            Developer debugging setting to turn on DEBUG mode for client scripts in the browser
+         -->
+         <client-debug>false</client-debug>
+
+         <!--
+            LOGGING can always be toggled at runtime when in DEBUG mode (Ctrl, Ctrl, Shift, Shift).
+            This flag automatically activates logging on page load.
+         -->
+         <client-debug-autologging>false</client-debug-autologging>
+      </flags>
+   </config>
+   
+   <config evaluator="string-compare" condition="WebFramework">
+      <web-framework>
+         <!-- SpringSurf Autowire Runtime Settings -->
+         <!-- 
+              Developers can set mode to 'development' to disable; SpringSurf caches,
+              FreeMarker template caching and Rhino JavaScript compilation.
+         -->
+         <autowire>
+            <!-- Pick the mode: "production" or "development" -->
+            <mode>production</mode>
+         </autowire>
+
+         <!-- Allows extension modules with <auto-deploy> set to true to be automatically deployed -->
+         <module-deployment>
+            <mode>manual</mode>
+            <enable-auto-deploy-modules>true</enable-auto-deploy-modules>
+         </module-deployment>
+      </web-framework>
+   </config>
+
+   <!--
+      To run the CSRF Token Filter behind 1 or more proxies that do not rewrite the Origin or Referere headers:
+
+      1. Copy the "CSRFPolicy" default config in share-security-config.xml and paste it into this file.
+      2. Replace the old config by setting the <config> element's "replace" attribute to "true" like below:
+         <config evaluator="string-compare" condition="CSRFPolicy" replace="true">
+      3. To every <action name="assertReferer"> element add the following child element
+         <param name="referer">http://www.proxy1.com/.*|http://www.proxy2.com/.*</param>
+      4. To every <action name="assertOrigin"> element add the following child element
+         <param name="origin">http://www.proxy1.com|http://www.proxy2.com</param>
+   -->
+
+   <!-- Document Library config section -->
+   <config evaluator="string-compare" condition="DocumentLibrary" replace="true">
+
+      <tree>
+         <!--
+            Whether the folder Tree component should enumerate child folders or not.
+            This is a relatively expensive operation, so should be set to "false" for Repositories with broad folder structures.
+         -->
+         <evaluate-child-folders>false</evaluate-child-folders>
+         
+         <!--
+            Optionally limit the number of folders shown in treeview throughout Share.
+         -->
+         <maximum-folder-count>1000</maximum-folder-count>
+         
+         <!--  
+            Default timeout in milliseconds for folder Tree component to recieve response from Repository
+         -->
+         <timeout>7000</timeout>
+      </tree>
+
+      <!--
+         Used by "Manage Rules" -> "Add aspect" action.
+
+         If an aspect has been specified without a title element in the content model,
+         or you need to support multiple languages,
+         then an i18n file is needed on the Repo AMP/JAR extension side for the aspect to
+         be visible when creating rules:
+
+          custom_customModel.aspect.custom_myaspect.title=My Aspect
+
+         Used by the "Manage Aspects" action.
+
+         For the aspect to have a localised label add relevant i18n string(s) in a Share AMP/JAR extension:
+
+          aspect.custom_myaspect=My Aspect
+      -->
+      <aspects>
+         <!-- Aspects that a user can see -->
+         <visible>
+            <aspect name="cm:generalclassifiable" />
+            <aspect name="cm:complianceable" />
+            <aspect name="cm:dublincore" />
+            <aspect name="cm:effectivity" />
+            <aspect name="cm:summarizable" />
+            <aspect name="cm:versionable" />
+            <aspect name="cm:templatable" />
+            <aspect name="cm:emailed" />
+            <aspect name="emailserver:aliasable" />
+            <aspect name="cm:taggable" />
+            <aspect name="app:inlineeditable" />
+            <aspect name="cm:geographic" />
+            <aspect name="exif:exif" />
+            <aspect name="audio:audio" />
+            <aspect name="cm:indexControl" />
+            <aspect name="dp:restrictable" />
+            <aspect name="smf:customConfigSmartFolder" />
+            <aspect name="smf:systemConfigSmartFolder" />
+            <aspect name="docusign:appConfigurationAspect" />
+            
+         </visible>
+
+         <!-- Aspects that a user can add. Same as "visible" if left empty -->
+         <addable>
+         </addable>
+
+         <!-- Aspects that a user can remove. Same as "visible" if left empty -->
+         <removeable>
+         </removeable>
+      </aspects>
+
+      <!--
+         Used by "Manage Rules" -> "Specialise type" action.
+
+         If a type has been specified without a title element in the content model,
+         or you need to support multiple languages,
+         then an i18n file is needed on the Repo AMP/JAR extension side for the type to
+         be visible when creating rules:
+
+            custom_customModel.type.custom_mytype.title=My SubType
+
+         Used by the "Change Type" action.
+
+         For the type to have a localised label add relevant i18n string(s) in a Share AMP/JAR extension:
+
+            type.custom_mytype=My SubType
+
+         Define valid subtypes using the following example:
+
+            <type name="cm:content">
+             <subtype name="custom:mytype" />
+            </type>
+      -->
+      <types>
+         <type name="cm:content">
+            <subtype name="smf:smartFolderTemplate" />
+         </type>
+
+          <type name="cm:folder">
+         </type>
+
+         <type name="trx:transferTarget">
+            <subtype name="trx:fileTransferTarget" />
+         </type>
+      </types>
+
+
+      <!-- Custom Indicators -->
+      <indicators>
+      
+      	<indicator id="signature-in-progress" index="10" icon="editing-16.png">
+            <evaluator>seedim.evaluator.doclib.action.hasDigitalSignatureAspect</evaluator>
+            <evaluator negate="true">seedim.evaluator.doclib.action.isSignedDocument</evaluator>
+            <evaluator negate="true">seedim.evaluator.doclib.action.signatureComplete</evaluator>           
+        </indicator>
+        <indicator id="is-signedOriginal" index="10" icon="select-documents-16.png">
+            <evaluator>seedim.evaluator.doclib.action.hasDigitalSignatureAspect</evaluator>
+            <evaluator>seedim.evaluator.doclib.action.signatureComplete</evaluator>
+            <evaluator negate="true">seedim.evaluator.doclib.action.isSignedDocument</evaluator>
+        </indicator>
+        <indicator id="is-signedDocument" index="10" icon="select-all-16.png">
+            <evaluator>seedim.evaluator.doclib.action.hasDigitalSignatureAspect</evaluator>
+            <evaluator>seedim.evaluator.doclib.action.isSignedDocument</evaluator>
+        </indicator>
+        
+        
+        
+    </indicators>
+
+      <!--
+         If set, will present a WebDAV link for the current item on the Document and Folder details pages.
+         Also used to generate the "View in Alfresco Explorer" action for folders.
+      -->
+      <repository-url>http://localhost:8080/alfresco</repository-url>
+      <!--
+         File upload configuration
+      -->
+      <file-upload>
+         <!--
+            Adobe Flash™
+            In certain environments, an HTTP request originating from Flash cannot be authenticated using an existing session.
+            See: http://bugs.adobe.com/jira/browse/FP-4830
+            For these cases, it is useful to disable the Flash-based uploader for Share Document Libraries.
+         -->
+         <adobe-flash-enabled>true</adobe-flash-enabled>
+      </file-upload>
+      <sorting>
+         <sort label="label.created">cm:created|false</sort>
+         <sort label="label.name">cm:name|true</sort>
+         <sort label="label.description">cm:description</sort>        
+         <sort label="label.popularity">cm:likesRatingSchemeCount|false</sort>
+         <sort label="label.title">cm:title</sort>
+         <sort label="label.creator">cm:creator</sort>
+         <sort label="label.modified">cm:modified</sort>
+         <sort label="label.modifier">cm:modifier</sort>
+         <sort label="label.size">cm:content.size</sort>
+         <sort label="label.mimetype">cm:content.mimetype</sort>
+         <sort label="label.type">TYPE</sort>
+      </sorting>
+      
+     <multi-select>
+         <!-- <action type="action-link" id="onActionDownload" asset="document" icon="document-download" label="menu.selected-items.download" /> -->
+         <action type="action-link" id="onActionCopyTo" asset="document" icon="document-copy-to" label="menu.selected-items.copy" />
+         <action type="action-link" id="onActionMoveTo" asset="document" icon="document-move-to" permission="Delete" label="menu.selected-items.move" notAspect="smf:smartFolder,smf:smartFolderChild"/>
+         <action type="action-link" id="onActionAssignWorkflow" asset="document" icon="document-assign-workflow" label="menu.selected-items.assign-workflow" notAspect="pms:planDocumentAspect"/>
+         <action type="action-link" id="onActionDelete" asset="document" icon="document-delete" permission="Delete" label="menu.selected-items.delete" notAspect="hwf:hybridWorkflow,sys:undeletable,smf:smartFolder" /> 
+         
+      </multi-select>
+
+   </config>
+   <!-- <config evaluator="string-compare" condition="DocLibCustom" replace="true">
+      <dependencies>
+         <js src="/components/documentlibrary/seedim-docusign.js" />
+      </dependencies>
+   </config> -->
+   
+  
+  
+</alfresco-config>

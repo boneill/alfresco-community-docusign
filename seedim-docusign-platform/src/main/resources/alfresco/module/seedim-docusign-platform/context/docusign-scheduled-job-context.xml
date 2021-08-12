@@ -1,0 +1,169 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE beans PUBLIC '-//SPRING//DTD BEAN//EN' 'http://www.springframework.org/dtd/spring-beans.dtd'>
+
+<beans>
+    
+    <!--
+    Define the model factory used to generate object models suitable for use with freemarker templates. 
+    -->
+    <bean id="templateActionModelFactory" class="org.alfresco.repo.action.scheduled.FreeMarkerWithLuceneExtensionsModelFactory">
+        <property name="serviceRegistry">
+            <ref bean="ServiceRegistry"/>
+        </property>
+    </bean>
+    
+    <!-- An action Template definition to call delete-old-minor-versions action using the schedule job -->
+    
+	<bean id="processSignedDocumentActionTemplate" class="org.alfresco.repo.action.scheduled.SimpleTemplateActionDefinition">
+        <!-- The name of the action. -->
+        <property name="actionName">
+            <value>process-signed-document</value>
+        </property>
+        <!-- Dummy Parameter Has to be added or the action does not get called -->
+        <property name="parameterTemplates">
+        <map>
+        	<entry>
+        		<key>
+                     <value>a-parameter</value>
+                </key>
+                    <value>a-value</value>
+        	</entry>
+        </map>
+        </property>
+        <property name="templateActionModelFactory">
+            <ref bean="templateActionModelFactory"/>
+        </property>
+        <property name="dictionaryService">
+            <ref bean="DictionaryService"/>
+        </property>
+        <property name="actionService">
+            <ref bean="ActionService"/>
+        </property>
+        <property name="templateService">
+            <ref bean="TemplateService"/>
+        </property>
+    </bean>    
+    
+    <!-- The query and scheduler definition -->
+    
+    <bean id="processSignedDocumentJob" class="org.alfresco.repo.action.scheduled.CronScheduledQueryBasedTemplateActionDefinition">
+        <property name="transactionMode">
+            <value>ISOLATED_TRANSACTIONS</value>  <!--  for each node the action is run in an isolated transaction. Failures are logged. -->
+        </property>
+        <property name="compensatingActionMode">
+            <value>IGNORE</value>
+        </property>
+        <property name="searchService">
+            <ref bean="SearchService"/>
+        </property>
+        <property name="templateService">
+            <ref bean="TemplateService"/>
+        </property>
+        <property name="queryLanguage">
+            <value>lucene</value>
+        </property>
+        <property name="stores">
+            <list>
+                <value>workspace://SpacesStore</value>
+            </list>
+        </property>
+        <property name="queryTemplate">
+            <!-- Note - FreeMarker ${..} entries must be escaped in Spring context files -->
+            <!-- Find all nodes modified between today or 10 days before  -->
+            <!-- <value>@cm\:modified:\$\{luceneDateRange(today, "-P10D")\}</value> -->
+            <value>ASPECT:"{http://www.seedim.com.au/model/content/docusign/1.0}digitalSignature" AND @docusign\:status:"sent" AND @docusign\:documentType:"Original"</value>
+        </property>
+        <property name="cronExpression">
+            <!-- <value>0 30 2 * * ?</value> -->
+            <value>${DS_SIGNATURE_REQUEST_STATUS_CHECK_JOB_CRON}</value>
+        </property>
+        <property name="jobName">
+            <value>jobProcessSignedDocument</value>
+        </property>
+        <property name="jobGroup">
+            <value>jobGroupSeed</value>
+        </property>
+        <property name="triggerName">
+            <value>triggerprocessSignedDocument</value>
+        </property>
+        <property name="triggerGroup">
+            <value>triggerGroup</value>
+        </property>
+        <property name="scheduler">
+            <ref bean="schedulerFactory"/>
+        </property>
+        <property name="actionService">
+            <ref bean="ActionService"/>
+        </property>
+        <property name="templateActionModelFactory">
+            <ref bean="templateActionModelFactory"/>
+        </property>
+        <property name="templateActionDefinition">
+            <ref bean="processSignedDocumentActionTemplate"/>
+        </property>
+        <property name="transactionService">
+            <ref bean="TransactionService"/>
+        </property>
+        <property name="runAsUser">
+            <value>System</value>
+        </property>
+    </bean>
+    
+    
+    
+    <bean id="au.com.seedim.docusign.CheckStatusJobExecutor"
+          class="au.com.seedim.docusign.job.checkstatus.CheckStatusJobExecutor">
+        <property name="serviceRegistry">
+            <ref bean="ServiceRegistry" />
+        </property>
+        <property name="docusignService" ref="docusign.DocusignService" />
+        <property name="actionService" ref="ActionService" />    
+
+    </bean>
+
+      
+    <bean id="au.com.seedim.docusign.jobDetail" 
+    	class="org.springframework.scheduling.quartz.JobDetailFactoryBean">
+		<property name="jobClass" value="au.com.seedim.docusign.job.checkstatus.CheckStatusJobDetail" />
+		<property name="jobDataAsMap">
+			<map>
+				<entry key="jobExecuter">
+                    <ref bean="au.com.seedim.docusign.CheckStatusJobExecutor" />
+                </entry>
+				<entry key="jobLockService">
+					<ref bean="jobLockService" />
+				</entry>
+			</map>
+		</property>
+	</bean>
+
+        
+    <bean id="au.com.seedim.docusign.checkStatusJob.trigger"
+		class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+		<property name="cronExpression">
+            <value>${seedim.docusign.checkstatus.scheduledjob.cronexpression}</value>
+        </property>
+        <property name="startDelay">
+            <value>${seedim.docusign.checkstatus.scheduledjob.cronstartdelay}</value>
+        </property>
+		    <property name="jobDetail">
+            <ref bean="au.com.seedim.docusign.jobDetail" />
+        </property>
+	</bean>
+    
+    
+    <bean id="schedulerAccessor"
+		class="org.springframework.scheduling.quartz.SchedulerAccessorBean">
+		<property name="scheduler" ref="schedulerFactory" />
+		<property name="triggers">
+			<list>
+				<ref bean="au.com.seedim.docusign.checkStatusJob.trigger" />
+			</list>
+		</property>
+	</bean>
+	
+	
+    
+    
+    
+  </beans>

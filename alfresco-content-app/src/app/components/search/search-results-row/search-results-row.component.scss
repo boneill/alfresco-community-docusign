@@ -1,0 +1,33 @@
+.aca-search-results-row {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  height: 100%;
+  overflow: hidden;
+  min-height: 0;
+
+  .line {
+    margin: 5px;
+  }
+
+  .bold {
+    font-weight: 400;
+    color: var(--theme-text-bold-color);
+  }
+
+  .link {
+    text-decoration: none;
+    color: var(--theme-text-bold-color);
+  }
+
+  .link:hover,
+  .aca-location-link .adf-datatable-cell-value:hover {
+    color: var(--theme-primary-color) !important;
+    text-decoration: underline;
+  }
+
+  .adf-is-selected .link:not(:hover),
+  .adf-is-selected .adf-datatable-cell-value:not(:hover) {
+    color: var(--theme-primary-color) !important;
+  }
+}

@@ -1,0 +1,32 @@
+<webscript>
+   <shortname>Request Signature using a docusign envelope</shortname>
+   <description>Send a signature request to docusign as an envelope request.
+
+        POST body should include JSON such as:
+        {
+	"documentName": "Copy of grass.jpg",
+	"title": "Please Sign the attached document",
+	"message": "Message in body of email",
+	"expireDays": "14",
+	"expireWarn": "2",
+	"remindDays": "2",
+	"remindFrequency": "2",
+	"recipients": [{
+		"name": "Brian",
+		"email": "bgkoneill@gmail.com",
+		"action": "sign"
+	}, {
+		"name": "John",
+		"email": "bgkoneill@gmail.com",
+		"action": "sign"
+	}],
+	"signedDocumentFolder": "880a0f47-31b1-4101-b20b-4d325e54e8b1"
+}
+    </description>
+   <url>/seedim/docusign/sign/envelope</url>
+  <format default="json">extension</format>
+  <authentication>user</authentication>
+  <transaction>required</transaction>
+  <family>SeedIM Docusign</family>
+</webscript>
+

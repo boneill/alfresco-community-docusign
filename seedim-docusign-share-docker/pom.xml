@@ -30,7 +30,7 @@
         </dependency>
     </dependencies>
 
-        <build>
+    <build>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -51,7 +51,7 @@
                     </execution>
                 </executions>
             </plugin>
-             <!-- Filter the Dockerfile and the other files added to the container to be able to replace maven properties -->
+            <!-- Filter the Dockerfile and the other files added to the container to be able to replace maven properties -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-resources-plugin</artifactId>
@@ -74,7 +74,6 @@
                     </execution>
                 </executions>
             </plugin>
-         </plugins>
+        </plugins>
     </build>
-    
-    </project>
+</project>

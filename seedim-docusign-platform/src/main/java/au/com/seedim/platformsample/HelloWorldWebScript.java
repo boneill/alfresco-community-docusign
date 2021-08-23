@@ -41,7 +41,7 @@ public class HelloWorldWebScript extends DeclarativeWebScript {
         Map<String, Object> model = new HashMap<String, Object>();
         model.put("fromJava", "HelloFromJava");
 
-        logger.debug("Your 'Hello World' Web Script was called and changed by brian!");
+        logger.debug("Your 'Hello World' Web Script was called!");
 
         return model;
     }

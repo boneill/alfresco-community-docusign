@@ -457,6 +457,8 @@ private String clientId;
 	  	
 	    final StringBuffer query = new StringBuffer("ASPECT:\"docusign:digitalSignature\"");
 	    query.append(" AND docusign:status:" + statusGroup.toString());
+	    String signatureRequestType = "Original";
+	    query.append(" AND docusign:documentType:" + signatureRequestType);
 	    if(sentBy != null) {
 	    	query.append(" AND @docusign:sentBy:\"" + sentBy + "\"" );
 	    }

@@ -18,15 +18,13 @@ services:
       dockerfile: ./Dockerfile
       context: ../../../seedim-docusign-platform-docker/target
     environment:
+      JAVA_TOOL_OPTIONS: "${keystore.settings}"
       CATALINA_OPTS: "-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=0.0.0.0:8888"
-    command: ["catalina.sh", "run"]
     ports:
       - "${acs.port}:8080"
       - "${acs.debug.port}:8888"
     volumes:
       - seedim-docusign-acs-volume:/usr/local/tomcat/alf_data
-      - ../../../seedim-docusign-platform/target/classes:/usr/local/tomcat/hotswap-agent/seedim-docusign-platform/target/classes
-      - ../../../seedim-docusign-integration-tests/target/test-classes:/usr/local/tomcat/hotswap-agent/seedim-docusign-integration-tests/target/test-classes
     depends_on:
       - seedim-docusign-postgres
   seedim-docusign-postgres:

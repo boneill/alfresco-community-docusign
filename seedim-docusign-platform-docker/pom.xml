@@ -29,8 +29,7 @@
             <scope>test</scope>
             <classifier>tests</classifier>
         </dependency>
-		
-		<dependency>
+        <dependency>
             <groupId>com.docusign</groupId>
             <artifactId>docusign-esign-java</artifactId>
             <version>3.2.0</version>

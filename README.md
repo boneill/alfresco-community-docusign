@@ -4,7 +4,7 @@ The Docusign Addon allows a user to request an electronic signature for a docume
 
 **Building Alfresco Docusign Addon**
 
-    Clone Alfresco Shop from github repo
+    Clone Alfresco Docusign from github repo
 	   $ git clone https://github.com/boneill/alfresco-community-docusign.git
     
     Build Alfresco AMPs
